@@ -1,1 +1,3 @@
 *.pyc
+api.cfg
+__pycache__/*
