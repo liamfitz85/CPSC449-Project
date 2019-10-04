@@ -1,5 +1,10 @@
 # CPSC449-Project-01
 usage:
-foreman start -m users=1,tracks=1,playlists=1,descriptions=1 
--OR- 
 foreman start
+
+This will run all microservices once.
+The .env is a global environment file.
+Procfile can set environment variables per line.
+.cfg files contain environment variables for each specific microservice.
+--descriptions.cfg has a test variable you can see by running foreman start and browse to the descriptions http://localhost:port/
+
