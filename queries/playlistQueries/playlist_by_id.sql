@@ -1,2 +1,2 @@
 -- :name playlist_by_id :one
-SELECT * FROM playlists WHERE id = :id;
+SELECT * FROM playlists WHERE playID = :playID;

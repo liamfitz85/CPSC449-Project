@@ -24,9 +24,9 @@ def allPlaylists():
     allPlaylists = plQueries.all_playlists()
     return list(allPlaylists)
 
-@app.route("/api/v1/collections/playlists/<int:id>", methods = ["GET"])
-def filterPlaylistsByID(id):
-    return plQueries.playlist_by_id(id=id)
+@app.route("/api/v1/collections/playlists/<int:playID>", methods = ["GET"])
+def filterPlaylistsByID(playID):
+    return plQueries.playlist_by_id(playID=playID)
     
 @app.route('/api/v1/collections/playlists', methods=['GET', 'POST'])
 def playlists():
@@ -37,7 +37,7 @@ def playlists():
 
 def createPlaylist(playlist):
     playlist = request.data
-    requiredFields = ["title", "user"]
+    requiredFields = ["playTitle", "playUser"]
     
     if not all([field in playlist for field in requiredFields]):
         raise exceptions.ParseError()
@@ -59,13 +59,13 @@ def filterPlaylists(queryParams):
     to_filter = []
     
     if id:
-        buffer += ' playlist.id=? AND'
+        buffer += ' playID=? AND'
         to_filter.append(id)
     if title:
-        buffer += ' playlist.title=? AND'
+        buffer += ' playTitle=? AND'
         to_filter.append(title)
     if user:
-        buffer += ' playlist.user = (SELECT users.userID FROM users WHERE users.name=?) AND' #subject to change
+        buffer += ' playUser = (SELECT users.userID FROM users WHERE users.name=?) AND' #subject to change
         buffer2 = 1
         to_filter.append(user)
     if not (id or title or user):
@@ -73,7 +73,7 @@ def filterPlaylists(queryParams):
      
      #I have no idea if this is right or not
     if buffer2 is not None:
-        query = "SELECT playlists.id, playlists.title, playlists.user, playlist.desc, playlist.listOfTracks, users.userFirstName, users.userLastName, users.userMiddleName FROM playlists INNER JOIN users ON playlists.user = users.userID WHERE" + buffer
+        query = "SELECT playlists.playID, playlists.playTitle, playlist.playDesc, playlist.listOfTracks, users.userFirstName, users.userLastName, users.userMiddleName FROM playlists INNER JOIN users ON playlists.playUser = users.userID WHERE" + buffer
     else:
         query += buffer
      

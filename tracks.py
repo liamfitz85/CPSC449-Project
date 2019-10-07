@@ -30,9 +30,9 @@ def allSongs():
     allTracks = trackQueries.all_tracks()
     return list(allTracks)
 
-@app.route("/api/v1/collections/songs/<int:id>", methods = ["GET"])
-def filterSongByID(id):
-    return trackQueries.track_by_id(id=id)
+@app.route("/api/v1/collections/songs/<int:trackID>", methods = ["GET"])
+def filterSongByID(trackID):
+    return trackQueries.track_by_id(trackID=trackID)
     
 @app.route('/api/v1/collections/songs', methods=['GET', 'POST'])
 def songs():
@@ -43,12 +43,12 @@ def songs():
     
 def createTrack(song):
     song = request.data
-    requiredFields = ["title", "albumTitle", "artist", "length", "mediaURL"]
+    requiredFields = ["trackTitle", "trackAlbum", "trackArtist", "trackLength", "trackMedia"]
     
     if not all([field in song for field in requiredFields]):
         raise exceptions.ParseError()
     try:
-        song['id'] = trackQueries.create_track(**song)
+        song['trackID'] = trackQueries.create_track(**song)
     except Exception as e:
         return { 'error': str(e) }, status.HTTP_409_CONFLICT
         
@@ -63,13 +63,13 @@ def filterTracks(queryParams):
     to_filter = []
     
     if id:
-        query += ' id=? AND'
+        query += ' trackID=? AND'
         to_filter.append(id)
     if title:
-        query += ' title=? AND'
+        query += ' trackTitle=? AND'
         to_filter.append(title)
     if albumTitle:
-        query += ' albumTitle=? AND'
+        query += ' trackAlbum=? AND'
         to_filter.append(albumTitle)
     if not (id or title or albumTitle):
         raise exceptions.NotFound()
