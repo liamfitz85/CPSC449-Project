@@ -1,6 +1,7 @@
 # CPSC449-Project-01
 usage:
-foreman start
+*first time: ./run
+*else: foreman start
 
 This will run all microservices once.
 The .env is a global environment file.
