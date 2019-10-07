@@ -1,0 +1,3 @@
+#!/bin/bash
+sqlite3 music.db < queries/initQueries/init_db.sql
+foreman start

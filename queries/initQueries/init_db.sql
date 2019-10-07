@@ -21,22 +21,26 @@ CREATE TABLE tracks (
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
-	name VARCHAR,
-	email VARCHAR,
-	userid INTEGER primary key,
-	bd VARCHAR,
-	password VARCHAR,
-	UNIQUE(email)
+	userID INTEGER PRIMARY KEY,
+	userFirstName TEXT NOT NULL,
+	userLastName TEXT NOT NULL,
+	userMiddleName TEXT NOT NULL,
+	userEmail TEXT NOT NULL,
+	userBD TEXT NOT NULL,
+	userPassword TEXT NOT NULL,
+	UNIQUE(userEmail)
 );
 
 DROP TABLE IF EXISTS descriptions;
 CREATE TABLE descriptions (
-	descID INTEGER primary key,
-	description VARCHAR,
+	descriptionID INTEGER PRIMARY KEY,
+	descriptionDesc TEXT,
 	trackID INT,
 	userID INT,
-	UNIQUE(trackID, userID)
+	FOREIGN KEY(userID) REFERENCES users (userID),
+	FOREIGN KEY(trackID) REFERENCES tracks (id)
 );
+
 COMMIT;
 
 
