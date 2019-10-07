@@ -5,6 +5,7 @@ CREATE TABLE playlists (
     	playTitle VARCHAR,
     	playUser VARCHAR,
     	playDesc VARCHAR,
+	playListOfTracks VARCHAR, /*i have no idea how this works*/
    	UNIQUE(playID),
 	FOREIGN KEY(playUser) REFERENCES users (userID)
 );
@@ -14,6 +15,7 @@ CREATE TABLE tracks (
 	trackID INTEGER primary key,
 	trackTitle VARCHAR,
 	trackAlbum VARCHAR,
+	trackArtist VARCHAR,
 	trackLength INT,
 	trackMedia VARCHAR,
 	trackArt VARCHAR,
