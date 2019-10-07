@@ -29,13 +29,12 @@ def filterPlaylistsByID(id):
     return plQueries.playlist_by_id(id=id)
     
 @app.route('/api/v1/collections/playlists', methods=['GET', 'POST'])
-def songs():
+def playlists():
     if request.method == 'GET':
         return filterTracks(request.args)
     elif request.method == 'POST':
         return createPlaylist(request.data)
-    
-#@app.route("/api/v1/collections/playlists/new", methods = ["POST"])
+
 def createPlaylist(playlist):
     playlist = request.data
     requiredFields = ["title", "user"]
@@ -49,7 +48,6 @@ def createPlaylist(playlist):
         
     return song, status.HTTP_201_CREATED
     
-#@app.route("/api/v1/collections/playlists/", methods = ["GET"])
 def filterPlaylists(queryParams):
     id = queryParam.get("id")
     title = queryParam.get("title")
