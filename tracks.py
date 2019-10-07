@@ -1,3 +1,8 @@
+#####################################################
+#TODO                                                                                                       #
+#STILL NEED TO CREATE AN EDIT AND DELETE FUNCTION#
+####################################################
+
 import sys
 from flask import request
 import flask_api
@@ -22,10 +27,6 @@ def home():
     
 @app.route("/api/v1/collections/songs/all", methods = ["GET"])
 def allSongs():
-    # dbConn = sqlite.connect("<INSERT DB FILENAME HERE>")
-    # dbConn.row_factory = dict_factory
-    # cursor = dbConn.cursor()
-    # results = cursor.execute("SELECT * FROM <INSERT TABLE NAME HERE>")
     allTracks = trackQueries.all_tracks()
     return list(allTracks)
 
@@ -33,8 +34,14 @@ def allSongs():
 def filterSongByID(id):
     return trackQueries.track_by_id(id=id)
     
-@app.route("/api/v1/collections/songs/new", methods = ["POST"])
-def createTrack():
+@app.route('/api/v1/collections/songs', methods=['GET', 'POST'])
+def songs():
+    if request.method == 'GET':
+        return filterTracks(request.args)
+    elif request.method == 'POST':
+        return createTrack(request.data)
+    
+def createTrack(song):
     song = request.data
     requiredFields = ["title", "albumTitle", "artist", "length", "mediaURL"]
     
@@ -47,12 +54,10 @@ def createTrack():
         
     return song, status.HTTP_201_CREATED
     
-@app.route("/api/v1/collections/songs/", methods = ["GET"])
-def filterTracks():
-    temp = request.args
-    id = temp.get("id")
-    title = temp.get("title")
-    albumTitle = temp.get("albumTitle")
+def filterTracks(queryParam):
+    id = queryParam.get("id")
+    title = queryParam.get("title")
+    albumTitle = queryParam.get("albumTitle")
     
     query = "SELECT * FROM tracks WHERE"
     to_filter = []

@@ -1,3 +1,8 @@
+########################################
+#TODO                                                                          #
+#STILL NEED TO MAKE A DELETE FUNCTION#
+########################################
+
 import sys
 from flask import request
 import flask_api
@@ -23,10 +28,17 @@ def allPlaylists():
 def filterPlaylistsByID(id):
     return plQueries.playlist_by_id(id=id)
     
-@app.route("/api/v1/collections/playlists/new", methods = ["POST"])
-def createPlaylist():
+@app.route('/api/v1/collections/playlists', methods=['GET', 'POST'])
+def songs():
+    if request.method == 'GET':
+        return filterTracks(request.args)
+    elif request.method == 'POST':
+        return createPlaylist(request.data)
+    
+#@app.route("/api/v1/collections/playlists/new", methods = ["POST"])
+def createPlaylist(playlist):
     playlist = request.data
-    requiredFields = ["title", "albumTitle", "artist", "length", "mediaURL"]
+    requiredFields = ["title", "user"]
     
     if not all([field in playlist for field in requiredFields]):
         raise exceptions.ParseError()
@@ -37,12 +49,11 @@ def createPlaylist():
         
     return song, status.HTTP_201_CREATED
     
-@app.route("/api/v1/collections/playlists/", methods = ["GET"])
-def filterPlaylists():
-    temp = request.args
-    id = temp.get("id")
-    title = temp.get("title")
-    user = temp.get("user")
+#@app.route("/api/v1/collections/playlists/", methods = ["GET"])
+def filterPlaylists(queryParams):
+    id = queryParam.get("id")
+    title = queryParam.get("title")
+    user = queryParam.get("user")
     
     query = "SELECT * FROM playlists WHERE"
     buffer = None
@@ -50,13 +61,13 @@ def filterPlaylists():
     to_filter = []
     
     if id:
-        buffer += ' id=? AND'
+        buffer += ' playlist.id=? AND'
         to_filter.append(id)
     if title:
-        buffer += ' title=? AND'
+        buffer += ' playlist.title=? AND'
         to_filter.append(title)
     if user:
-        buffer += ' user=? AND'
+        buffer += ' playlist.user = (SELECT users.id FROM users WHERE users.name=?) AND'
         buffer2 = 1
         to_filter.append(albumTitle)
     if not (id or title or albumTitle):
@@ -64,7 +75,7 @@ def filterPlaylists():
      
      #I have no idea if this is right or not
     if buffer2 is not None:
-        query = "SELECT playlists.id, playlists.title, playlists.user, playlist.desc, playlist.listOfTracks, user.name FROM playlists INNER JOIN users ON playlists.user = users.id WHERE" + buffer
+        query = "SELECT playlists.id, playlists.title, playlists.user, playlist.desc, playlist.listOfTracks, users.name FROM playlists INNER JOIN users ON playlists.user = users.id WHERE" + buffer
     else:
         query += buffer
      
