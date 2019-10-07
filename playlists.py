@@ -42,16 +42,16 @@ def createPlaylist(playlist):
     if not all([field in playlist for field in requiredFields]):
         raise exceptions.ParseError()
     try:
-        playlist['id'] = queries.create_playlist(**playlist)
+        playlist['id'] = plQueries.create_playlist(**playlist)
     except Exception as e:
         return { 'error': str(e) }, status.HTTP_409_CONFLICT
         
     return song, status.HTTP_201_CREATED
     
 def filterPlaylists(queryParams):
-    id = queryParam.get("id")
-    title = queryParam.get("title")
-    user = queryParam.get("user")
+    id = queryParams.get("id")
+    title = queryParams.get("title")
+    user = queryParams.get("user")
     
     query = "SELECT * FROM playlists WHERE"
     buffer = None
@@ -65,15 +65,15 @@ def filterPlaylists(queryParams):
         buffer += ' playlist.title=? AND'
         to_filter.append(title)
     if user:
-        buffer += ' playlist.user = (SELECT users.id FROM users WHERE users.name=?) AND'
+        buffer += ' playlist.user = (SELECT users.userID FROM users WHERE users.name=?) AND' #subject to change
         buffer2 = 1
-        to_filter.append(albumTitle)
-    if not (id or title or albumTitle):
+        to_filter.append(user)
+    if not (id or title or user):
         raise exceptions.NotFound()    
      
      #I have no idea if this is right or not
     if buffer2 is not None:
-        query = "SELECT playlists.id, playlists.title, playlists.user, playlist.desc, playlist.listOfTracks, users.name FROM playlists INNER JOIN users ON playlists.user = users.id WHERE" + buffer
+        query = "SELECT playlists.id, playlists.title, playlists.user, playlist.desc, playlist.listOfTracks, users.userFirstName, users.userLastName, users.userMiddleName FROM playlists INNER JOIN users ON playlists.user = users.userID WHERE" + buffer
     else:
         query += buffer
      
