@@ -48,16 +48,16 @@ def createTrack(song):
     if not all([field in song for field in requiredFields]):
         raise exceptions.ParseError()
     try:
-        song['id'] = queries.create_track(**song)
+        song['id'] = trackQueries.create_track(**song)
     except Exception as e:
         return { 'error': str(e) }, status.HTTP_409_CONFLICT
         
     return song, status.HTTP_201_CREATED
     
-def filterTracks(queryParam):
-    id = queryParam.get("id")
-    title = queryParam.get("title")
-    albumTitle = queryParam.get("albumTitle")
+def filterTracks(queryParams):
+    id = queryParams.get("id")
+    title = queryParams.get("title")
+    albumTitle = queryParams.get("albumTitle")
     
     query = "SELECT * FROM tracks WHERE"
     to_filter = []
