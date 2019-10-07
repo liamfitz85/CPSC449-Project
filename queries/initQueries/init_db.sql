@@ -1,23 +1,23 @@
 BEGIN TRANSACTION;
 DROP TABLE IF EXISTS playlists;
 CREATE TABLE playlists (
-    	id INTEGER primary key,
-    	title VARCHAR,
-    	user VARCHAR,
-    	desc VARCHAR,
-   	UNIQUE(id),
-	FOREIGN KEY(user) REFERENCES users (userID)
+    	playID INTEGER primary key,
+    	playTitle VARCHAR,
+    	playUser VARCHAR,
+    	playDesc VARCHAR,
+   	UNIQUE(playID),
+	FOREIGN KEY(playUser) REFERENCES users (userID)
 );
 
 DROP TABLE IF EXISTS tracks;
 CREATE TABLE tracks (
-	id INTEGER primary key,
-	title VARCHAR,
-	albumTitle VARCHAR,
-	length INT,
-	mediaURL VARCHAR,
-	artURL VARCHAR,
-	UNIQUE(id, mediaURL)
+	trackID INTEGER primary key,
+	trackTitle VARCHAR,
+	trackAlbum VARCHAR,
+	trackLength INT,
+	trackMedia VARCHAR,
+	trackArt VARCHAR,
+	UNIQUE(trackID, trackMedia)
 );
 
 DROP TABLE IF EXISTS users;
@@ -39,7 +39,7 @@ CREATE TABLE descriptions (
 	trackID INT,
 	userID INT,
 	FOREIGN KEY(userID) REFERENCES users (userID),
-	FOREIGN KEY(trackID) REFERENCES tracks (id)
+	FOREIGN KEY(trackID) REFERENCES tracks (trackID)
 );
 
 COMMIT;
