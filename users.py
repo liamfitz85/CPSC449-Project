@@ -1,8 +1,12 @@
 import sys
 import flask_api
-from flask import request
-from flask_api import status, exceptions
 import pugsql
+from usefultool import jasonifier
+from flask import request, jsonify
+from flask_api import status, exceptions
+
+
+
 
 
 app = flask_api.FlaskAPI(__name__)
@@ -23,18 +27,19 @@ def register():
                 return create_user()
     elif request.method=='GET':
         all_users=queries.all_users()
-        return list(all_users)
+        data = list(all_users)
+        return jasonifier(data)
 
 def create_user():
     user = request.data
-    required_fields = ['userFirstName','userLastName','userMiddleName','userEmail','userBD', 'userPassword']
+    required_fields = ['userName','userUserName','userEmail','userPassword']
     if not all([field in user for field in required_fields]):
         raise exceptions.ParseError()
     try:
         user['id'] = queries.create_user(**user)
     except Exception as e:
-        return { 'error': str(e) }, status.HTTP_409_CONFLICT
-    return user, status.HTTP_201_CREATED
+        return jasonifier({ 'error': str(e) }, status.HTTP_409_CONFLICT)
+    return jasonifier(user, status.HTTP_201_CREATED)
        
 
 

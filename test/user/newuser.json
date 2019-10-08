@@ -1,8 +1,6 @@
 {
-    "userFirstName": "John",
-    "userLastName": "Scalzi",
-    "userMiddleName": "Ha",
+    "userName": "John Scalzi",
+    "userUserName": "WassupMan404",
     "userEmail": "js@gmail.com",
-    "userBD": "01:01:1991",
     "userPassword": "123456"
 }

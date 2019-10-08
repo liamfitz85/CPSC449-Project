@@ -25,11 +25,9 @@ CREATE TABLE tracks (
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
 	userID INTEGER PRIMARY KEY,
-	userFirstName TEXT NOT NULL,
-	userLastName TEXT NOT NULL,
-	userMiddleName TEXT NOT NULL,
+	userName TEXT NOT NULL,
+	userUserName TEXT NOT NULL,
 	userEmail TEXT NOT NULL,
-	userBD TEXT NOT NULL,
 	userPassword TEXT NOT NULL,
 	UNIQUE(userEmail)
 );
