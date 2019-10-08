@@ -2,7 +2,7 @@ import sys
 import flask_api
 import pugsql
 from usefultool import jasonifier, validContentType
-from flask import request, jsonify
+from flask import request, jsonify, Response
 from flask_api import status, exceptions
 
 app = flask_api.FlaskAPI(__name__)
@@ -60,13 +60,17 @@ def get_user(id):
         return jasonifier({ 'Error': str(e) }, status.HTTP_409_CONFLICT)  
 
 def delete_user(id):
-    try:
-        result = queries.user_delete_by_id(id=id)
-        if result:
-            return jasonifier(result)
-        else:
-            raise exceptions.ParseError()
-    except Exception as e:
-        return jasonifier({ 'Error': str(e) }, status.HTTP_409_CONFLICT)
+    user = queries.user_by_id(id=id)
+    if user:
+        try:
+            response=queries.user_delete_by_id(id=id)
+            if response:
+                return jasonifier(user)
+            else:
+                raise exceptions.ParseError()
+        except Exception as e:
+            return jasonifier({ 'DELETE REQUEST ACCEPTED': str(e) }, status.HTTP_202_ACCEPTED)  
+    return jasonifier({ 'Error': "USER NOT FOUND" },status.HTTP_404_NOT_FOUND)
+
 
 
