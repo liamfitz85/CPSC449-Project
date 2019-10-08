@@ -1,13 +1,9 @@
 import sys
 import flask_api
 import pugsql
-from usefultool import jasonifier
+from usefultool import jasonifier, validContentType
 from flask import request, jsonify
 from flask_api import status, exceptions
-
-
-
-
 
 app = flask_api.FlaskAPI(__name__)
 app.config.from_envvar('APP_CONFIG')
@@ -19,16 +15,17 @@ queries.connect(app.config['DATABASE_URL'])
 def home():
     return '''<h1>USER-SERVICE</h1>'''
 
-@app.route('/api/v1/user/register', methods=['POST', 'GET'])
+@app.route('/api/v1/users/register', methods=['POST', 'GET'])
 def register():
-    if request.method=='POST':
-        if request.headers.has_key('Content-Type'):
-            if request.headers['Content-Type'] == 'application/json':
-                return create_user()
-    elif request.method=='GET':
+    valid = validContentType(request)
+    if valid is not True:
+        return valid
+    if request.method=='GET':
         all_users=queries.all_users()
         data = list(all_users)
         return jasonifier(data)
+    elif request.method=='POST':
+        return create_user()
 
 def create_user():
     user = request.data
@@ -38,9 +35,38 @@ def create_user():
     try:
         user['id'] = queries.create_user(**user)
     except Exception as e:
-        return jasonifier({ 'error': str(e) }, status.HTTP_409_CONFLICT)
+        return jasonifier({ 'Error': str(e) }, status.HTTP_409_CONFLICT)
     return jasonifier(user, status.HTTP_201_CREATED)
-       
 
+
+@app.route('/api/v1/users/<int:id>', methods=['DELETE', 'GET'])
+def user(id):
+    valid = validContentType(request)
+    if valid is not True:
+        return valid
+    if request.method=='GET':
+        return get_user(id)
+    elif request.method=='DELETE':
+        return delete_user(id)
+        
+def get_user(id):
+    try:
+        user = queries.user_by_id(id=id)
+        if user:
+            return jasonifier(user)
+        else:
+            raise exceptions.ParseError()
+    except Exception as e:
+        return jasonifier({ 'Error': str(e) }, status.HTTP_409_CONFLICT)  
+
+def delete_user(id):
+    try:
+        result = queries.user_delete_by_id(id=id)
+        if result:
+            return jasonifier(result)
+        else:
+            raise exceptions.ParseError()
+    except Exception as e:
+        return jasonifier({ 'Error': str(e) }, status.HTTP_409_CONFLICT)
 
 

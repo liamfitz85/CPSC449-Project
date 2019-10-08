@@ -38,8 +38,8 @@ CREATE TABLE descriptions (
 	descriptionDesc TEXT,
 	trackID INT,
 	userID INT,
-	FOREIGN KEY(userID) REFERENCES users (userID),
-	FOREIGN KEY(trackID) REFERENCES tracks (trackID)
+	FOREIGN KEY(userID) REFERENCES users (userID) ON DELETE CASCADE,
+	FOREIGN KEY(trackID) REFERENCES tracks (trackID) ON DELETE CASCADE
 );
 
 COMMIT;
