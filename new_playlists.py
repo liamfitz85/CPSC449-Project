@@ -51,12 +51,12 @@ def getPlaylists(queryParams):
 	playTitle = queryParams.get("playTitle")
 	playUser = queryParams.get("playUser")
 
-	query = "SELECT * FROM playlists WHERE "
+	query = "SELECT * FROM playlists WHERE"
 
-	filtered_playlits = []
+	filtered_playlists = []
 
 	if playID:
-		query += "playID=? AND"
+		query += " playID=? AND"
 		filtered_playlists.append(playID)
 	if playTitle:
 		query += " playTitle=? AND"
