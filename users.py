@@ -110,15 +110,8 @@ def authenticate():
         if user2:
             if check_password_hash(user2['userPassword'],user['userPassword']):
                 return user2, status.HTTP_200_OK
-        return { 'Error': 'Login information not found' }, status.HTTP_401_UNAUTHORIZED
+        return { 'Error': 'Login information invalid' }, status.HTTP_401_UNAUTHORIZED
     except Exception as e:
         return { 'Error': str(e) }, status.HTTP_409_CONFLICT
 
 
-# def authenticate():
-#     user = request.data
-#     required_fields = ['userUserName','userPassword']
-#     user2 = queries.authenticate_by_username(**user)
-#     if user2:
-#         return user2, status.HTTP_200_OK
-#     return { 'Error': 'Login information not found' }, status.HTTP_401_UNAUTHORIZED
