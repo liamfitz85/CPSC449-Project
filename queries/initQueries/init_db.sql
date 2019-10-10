@@ -2,22 +2,22 @@ BEGIN TRANSACTION;
 DROP TABLE IF EXISTS playlists;
 CREATE TABLE playlists (
     	playID INTEGER primary key,
-    	playTitle VARCHAR,
-    	playUser VARCHAR,
+    	playTitle TEXT NOT NULL,
+    	playUserID INT,
     	playDesc VARCHAR,
-	playListOfTracks VARCHAR, /*i have no idea how this works*/
+	playListOfTracks TEXT NOT NULL,
    	UNIQUE(playID),
-	FOREIGN KEY(playUser) REFERENCES users (userID)
+	FOREIGN KEY(playUserID) REFERENCES users (userID) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS tracks;
 CREATE TABLE tracks (
 	trackID INTEGER primary key,
-	trackTitle VARCHAR,
-	trackAlbum VARCHAR,
-	trackArtist VARCHAR,
-	trackLength INT,
-	trackMedia VARCHAR,
+	trackTitle VARCHAR NOT NULL,
+	trackAlbum VARCHAR NOT NULL,
+	trackArtist VARCHAR NOT NULL,
+	trackLength INT NOT NULL,
+	trackMedia VARCHAR NOT NULL,
 	trackArt VARCHAR,
 	UNIQUE(trackID, trackMedia)
 );

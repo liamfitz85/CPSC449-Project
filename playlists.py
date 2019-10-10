@@ -1,10 +1,10 @@
-########################################
-#TODO                                                                          #
-#STILL NEED TO MAKE A DELETE FUNCTION#
-########################################
+#############################################################
+#TODO                                                                                                                         #
+#STILL NEED TO MAKE A DELETE FUNCTION AND CHECK FOR JSON#
+############################################################
 
 import sys
-from flask import request
+from flask import request, jsonify
 import flask_api
 from flask_api import status, exceptions
 import pugsql
@@ -26,59 +26,96 @@ def allPlaylists():
 
 @app.route("/api/v1/collections/playlists/<int:playID>", methods = ["GET"])
 def filterPlaylistsByID(playID):
-    return plQueries.playlist_by_id(playID=playID)
+    playlistByID = plQueries.playlist_by_id(playID=playID)
+    return list(playlistByID)
     
-@app.route('/api/v1/collections/playlists', methods=['GET', 'POST'])
+@app.route("/api/v1/users/<string:username>/playlists", methods = ["GET"]) #as requested by Duy
+def playlistByUsername(username):
+    playlistByUsername = plQueries.playlist_by_username(username = username)
+    return list(playlistByUsername)
+    
+@app.route('/api/v1/collections/playlists', methods=['GET', 'POST', 'DELETE'])
 def playlists():
     if request.method == 'GET':
-        return filterTracks(request.args)
+        return filterPlaylists(request.args)
     elif request.method == 'POST':
         return createPlaylist(request.data)
+    elif request.method == 'DELETE':
+        result = filterPlaylists(request.args)
+        if len(result) is 0:
+            raise exceptions.NotFound()
+        else:
+            return deletePlaylist(request.args)
+        
+def deletePlaylist(deleteParams):
+    playID = deleteParams.get("playID")
+    playTitle = deleteParams.get("playTitle")
+    #userName = deleteParams.get("userName")
+    
+    deleteQuery = "DELETE FROM playlists WHERE"
+    to_filter = []
+    
+    if playID:
+        deleteQuery += ' playID=? AND'
+        to_filter.append(playID)
+    if playTitle:
+        deleteQuery += ' playTitle=? AND'
+        to_filter.append(playTitle)
+    # if userName:
+        # deleteQuery += ' users.userName=? AND playlists.playUserID = users.userID AND'
+        # to_filter.append(userName)
+    if not (playID or playTitle):
+        raise exceptions.NotFound() 
+        
+    deleteQuery = deleteQuery[:-4] + ';'
+
+    results = plQueries._engine.execute(deleteQuery, to_filter)
+    result = []
+    return result, status.HTTP_200_OK
 
 def createPlaylist(playlist):
     playlist = request.data
-    requiredFields = ["playTitle", "playUser"]
+    requiredFields = ["playTitle", "playUserID", "playListOfTracks"]
     
     if not all([field in playlist for field in requiredFields]):
         raise exceptions.ParseError()
     try:
-        playlist['id'] = plQueries.create_playlist(**playlist)
+        playlist['playID'] = plQueries.create_playlist(**playlist)
     except Exception as e:
         return { 'error': str(e) }, status.HTTP_409_CONFLICT
         
-    return song, status.HTTP_201_CREATED
+    return playlist, status.HTTP_201_CREATED
     
 def filterPlaylists(queryParams):
-    id = queryParams.get("id")
-    title = queryParams.get("title")
-    user = queryParams.get("user")
+    playID = queryParams.get("playID")
+    playTitle = queryParams.get("playTitle")
+    #userName = queryParams.get("userName")
     
+    #query = "SELECT P.playID, P.playTitle, P.playDesc, P.playListOfTracks, U.userUserName FROM playlists as P, users as U WHERE"
     query = "SELECT * FROM playlists WHERE"
-    buffer = None
-    buffer2 = None
     to_filter = []
     
-    if id:
-        buffer += ' playID=? AND'
-        to_filter.append(id)
-    if title:
-        buffer += ' playTitle=? AND'
-        to_filter.append(title)
-    if user:
-        buffer += ' playUser = (SELECT users.userID FROM users WHERE users.name=?) AND' #subject to change
-        buffer2 = 1
-        to_filter.append(user)
-    if not (id or title or user):
-        raise exceptions.NotFound()    
-     
+    if playID:
+        query += ' playID=? AND'
+        to_filter.append(playID)
+    if playTitle:
+        query += ' playTitle=? AND'
+        to_filter.append(playTitle)
+    # if userName:
+        # query += " U.userUserName = ? AND P.playUserID = U.userID AND"
+        # to_filter.append(userName)
+    if not (playID or playTitle):
+        raise exceptions.NotFound()  
+        
+     #############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############
      #I have no idea if this is right or not
-    if buffer2 is not None:
-        query = "SELECT playlists.playID, playlists.playTitle, playlist.playDesc, playlist.listOfTracks, users.userFirstName, users.userLastName, users.userMiddleName FROM playlists INNER JOIN users ON playlists.playUser = users.userID WHERE" + buffer
-    else:
-        query += buffer
+    # if buffer2 is not None:
+        # query = "SELECT playlists.playID, playlists.playTitle, playlist.playDesc, playlist.listOfTracks, users.userName FROM playlists INNER JOIN users ON playlists.playUserID = users.userID WHERE" + buffer
+    # else:
+        # query += buffer
      
     query = query[:-4] + ';'
 
     results = plQueries._engine.execute(query, to_filter).fetchall()
-
+    
     return list(map(dict, results))
