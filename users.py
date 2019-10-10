@@ -4,6 +4,7 @@ import pugsql
 from usefultool import jasonifier, validContentType
 from flask import request, jsonify, Response
 from flask_api import status, exceptions
+from werkzeug.security import generate_password_hash
 
 app = flask_api.FlaskAPI(__name__)
 app.config.from_envvar('APP_CONFIG')
@@ -33,6 +34,7 @@ def create_user():
     if not all([field in user for field in required_fields]):
         raise exceptions.ParseError()
     try:
+        user['userPassword'] = generate_password_hash(user['userPassword'])
         user['id'] = queries.create_user(**user)
     except Exception as e:
         return jasonifier({ 'Error': str(e) }, status.HTTP_409_CONFLICT)
@@ -60,17 +62,11 @@ def get_user(id):
         return jasonifier({ 'Error': str(e) }, status.HTTP_409_CONFLICT)  
 
 def delete_user(id):
-    user = queries.user_by_id(id=id)
-    if user:
-        try:
-            response=queries.user_delete_by_id(id=id)
-            if response:
-                return jasonifier(user)
-            else:
-                raise exceptions.ParseError()
-        except Exception as e:
-            return jasonifier({ 'DELETE REQUEST ACCEPTED': str(e) }, status.HTTP_202_ACCEPTED)  
-    return jasonifier({ 'Error': "USER NOT FOUND" },status.HTTP_404_NOT_FOUND)
-
-
-
+    try:
+        affected = queries.user_delete_by_id(id=id)
+        if affected == 0:
+            return jasonifier({ 'Error': "USER NOT FOUND" },status.HTTP_404_NOT_FOUND)
+        else:
+            return jasonifier({ 'DELETE REQUEST ACCEPTED': str(id) }, status.HTTP_202_ACCEPTED)               
+    except Exception as e:
+        return { 'error': str(e) }, status.HTTP_409_CONFLICT 

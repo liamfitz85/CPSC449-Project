@@ -29,7 +29,7 @@ CREATE TABLE users (
 	userUserName TEXT NOT NULL,
 	userEmail TEXT NOT NULL,
 	userPassword TEXT NOT NULL,
-	UNIQUE(userEmail)
+	UNIQUE(userEmail,userUserName)
 );
 
 DROP TABLE IF EXISTS descriptions;
