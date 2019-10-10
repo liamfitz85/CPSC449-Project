@@ -89,3 +89,44 @@ curl --verbose \
 	http://127.0.0.1:5000/api/v1/users/login
 echo
 echo "----------------------------------------------------------------------------------"
+
+curl --verbose \
+	--request POST \
+	--header 'Content-Type: application/json' \
+	--data @test/user/login2.json \
+	http://127.0.0.1:5000/api/v1/users/login
+echo
+echo "----------------------------------------------------------------------------------"
+
+curl --verbose \
+	--request PUT \
+	--header 'Content-Type: application/json' \
+	--data @test/user/updatepassword.json \
+	http://127.0.0.1:5000/api/v1/users/WassupMan404/password
+echo
+echo "----------------------------------------------------------------------------------"
+
+curl --verbose \
+	--request POST \
+	--header 'Content-Type: application/json' \
+	--data @test/user/login2.json \
+	http://127.0.0.1:5000/api/v1/users/login
+echo
+echo "----------------------------------------------------------------------------------"
+
+curl --verbose \
+	--request POST \
+	--header 'Content-Type: application/json' \
+	--data @test/user/login.json \
+	http://127.0.0.1:5000/api/v1/users/login
+echo
+echo "----------------------------------------------------------------------------------"
+
+curl --verbose \
+	--request PUT \
+	--header 'Content-Type: application/json' \
+	--data @test/user/updatepassword2.json \
+	http://127.0.0.1:5000/api/v1/users/WassupMan4daffaf04/password
+echo
+echo "----------------------------------------------------------------------------------"
+

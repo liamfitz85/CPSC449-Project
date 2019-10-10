@@ -115,3 +115,30 @@ def authenticate():
         return { 'Error': str(e) }, status.HTTP_409_CONFLICT
 
 
+@app.route('/api/v1/users/<string:username>/password', methods=['PUT'])
+def password(username):
+    if request.method=='PUT':
+        valid = validContentType(request)
+        if valid is not True:
+            return valid
+        return update_password(username)
+
+def update_password(username):
+    user = request.data
+    required_fields = ['userUserName','userPassword', 'userNewPassword']
+    if not all([field in user for field in required_fields]):
+        raise exceptions.ParseError()
+    try:
+        user2 = queries.authenticate_by_username(**user)
+        if user2 and username==user2['userUserName']:
+            if check_password_hash(user2['userPassword'],user['userPassword']):
+                user['userPassword'] = generate_password_hash(user['userNewPassword'])
+                affected = queries.user_update_password(**user)
+                if affected == 0:
+                    raise exceptions.ParseError('Update query failed')
+                else:
+                    user2['userPassword'] = user['userPassword']
+                    return user2, status.HTTP_200_OK
+        return { 'Error': 'Login information invalid' }, status.HTTP_401_UNAUTHORIZED
+    except Exception as e:
+        return { 'Error': str(e) }, status.HTTP_409_CONFLICT
