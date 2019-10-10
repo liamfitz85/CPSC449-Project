@@ -1,14 +1,13 @@
-########################################
-#TODO                                                                          #
-#STILL NEED TO MAKE A DELETE FUNCTION#
-########################################
+#############################################################
+#TODO                                                                                                                         #
+#STILL NEED TO MAKE A DELETE FUNCTION AND CHECK FOR JSON#
+############################################################
 
 import sys
-from flask import request
+from flask import request, jsonify
 import flask_api
 from flask_api import status, exceptions
 import pugsql
-from usefultool.py import jasonifier, validContentType
 
 app = flask_api.FlaskAPI(__name__)
 app.config.from_envvar("APP_CONFIG")
@@ -23,30 +22,60 @@ def home():
 @app.route("/api/v1/collections/playlists/all", methods = ["GET"])
 def allPlaylists():
     allPlaylists = plQueries.all_playlists()
-    return jasonifier(list(allPlaylists))
+    return list(allPlaylists)
 
 @app.route("/api/v1/collections/playlists/<int:playID>", methods = ["GET"])
 def filterPlaylistsByID(playID):
     playlistByID = plQueries.playlist_by_id(playID=playID)
-    return jasonifier(list(playlistByID))
+    return list(playlistByID)
     
-@app.route("api/v1/users/<string:username>/playlists", methods = ["GET"]) #as requested by Duy
+@app.route("/api/v1/users/<string:username>/playlists", methods = ["GET"]) #as requested by Duy
 def playlistByUsername(username):
     playlistByUsername = plQueries.playlist_by_username(username = username)
-    return jasonifier(list(playlistByUsername))
+    return list(playlistByUsername)
     
 @app.route('/api/v1/collections/playlists', methods=['GET', 'POST', 'DELETE'])
 def playlists():
     if request.method == 'GET':
-        return filterTracks(request.args)
+        return filterPlaylists(request.args)
     elif request.method == 'POST':
         return createPlaylist(request.data)
     elif request.method == 'DELETE':
-        #return deletePlaylist()
+        result = filterPlaylists(request.args)
+        if len(result) is 0:
+            raise exceptions.NotFound()
+        else:
+            return deletePlaylist(request.args)
+        
+def deletePlaylist(deleteParams):
+    playID = deleteParams.get("playID")
+    playTitle = deleteParams.get("playTitle")
+    #userName = deleteParams.get("userName")
+    
+    deleteQuery = "DELETE FROM playlists WHERE"
+    to_filter = []
+    
+    if playID:
+        deleteQuery += ' playID=? AND'
+        to_filter.append(playID)
+    if playTitle:
+        deleteQuery += ' playTitle=? AND'
+        to_filter.append(playTitle)
+    # if userName:
+        # deleteQuery += ' users.userName=? AND playlists.playUserID = users.userID AND'
+        # to_filter.append(userName)
+    if not (playID or playTitle):
+        raise exceptions.NotFound() 
+        
+    deleteQuery = deleteQuery[:-4] + ';'
+
+    results = plQueries._engine.execute(deleteQuery, to_filter)
+    result = []
+    return result, status.HTTP_200_OK
 
 def createPlaylist(playlist):
     playlist = request.data
-    requiredFields = ["playTitle", "playUser", "playListOfTracks"]
+    requiredFields = ["playTitle", "playUserID", "playListOfTracks"]
     
     if not all([field in playlist for field in requiredFields]):
         raise exceptions.ParseError()
@@ -55,18 +84,15 @@ def createPlaylist(playlist):
     except Exception as e:
         return { 'error': str(e) }, status.HTTP_409_CONFLICT
         
-    #return song, status.HTTP_201_CREATED
-    return jasonifier(song, status.HTTP_201_CREATED)
-    
-#def deletePlaylist():
-    
+    return playlist, status.HTTP_201_CREATED
     
 def filterPlaylists(queryParams):
     playID = queryParams.get("playID")
     playTitle = queryParams.get("playTitle")
-    userName = queryParams.get("userName")
+    #userName = queryParams.get("userName")
     
-    query = "SELECT P.playID, P.playTitle, P.playDesc, P.listOfTracks, U.userName FROM playlists as P, users as U WHERE"
+    #query = "SELECT P.playID, P.playTitle, P.playDesc, P.playListOfTracks, U.userUserName FROM playlists as P, users as U WHERE"
+    query = "SELECT * FROM playlists WHERE"
     to_filter = []
     
     if playID:
@@ -75,10 +101,10 @@ def filterPlaylists(queryParams):
     if playTitle:
         query += ' playTitle=? AND'
         to_filter.append(playTitle)
-    if userName:
-        query += " U.userName = ? AND P.playUserID = U.userID AND"
-        to_filter.append(userName)
-    if not (id or title or user):
+    # if userName:
+        # query += " U.userUserName = ? AND P.playUserID = U.userID AND"
+        # to_filter.append(userName)
+    if not (playID or playTitle):
         raise exceptions.NotFound()  
         
      #############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############
@@ -91,5 +117,5 @@ def filterPlaylists(queryParams):
     query = query[:-4] + ';'
 
     results = plQueries._engine.execute(query, to_filter).fetchall()
-
-    return jasonifier(list(map(dict, results)))
+    
+    return list(map(dict, results))

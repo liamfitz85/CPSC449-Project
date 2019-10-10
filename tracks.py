@@ -1,14 +1,13 @@
-#####################################################
-#TODO                                                                                                       #
-#STILL NEED TO CREATE AN EDIT AND DELETE FUNCTION#
-####################################################
+#############################################################
+#TODO                                                                                                                          #
+#STILL NEED TO CREATE AN EDIT FUNCTION AND CHECK FOR JSON#
+#############################################################
 
 import sys
 from flask import request
 import flask_api
 from flask_api import status, exceptions
 import pugsql
-from usefultool.py import jasonifier, validContentType
 
 app = flask_api.FlaskAPI(__name__)
 app.config.from_envvar("APP_CONFIG")
@@ -23,12 +22,12 @@ def home():
 @app.route("/api/v1/collections/tracks/all", methods = ["GET"])
 def allTracks():
     allTracks = trackQueries.all_tracks()
-    return jasonifier(list(allTracks))
+    return list(allTracks)
 
 @app.route("/api/v1/collections/tracks/<int:trackID>", methods = ["GET"])
 def filterTrackByID(trackID):
     trackByID = trackQueries.track_by_id(trackID=trackID)
-    return jasonifier(list(trackByID))
+    return list(trackByID)
     
 @app.route('/api/v1/collections/tracks', methods=['GET', 'POST', 'DELETE'])
 def tracks():
@@ -37,42 +36,37 @@ def tracks():
     elif request.method == 'POST':
         return createTrack(request.data)
     elif request.method == 'DELETE':
-        #return deleteTrack(request.args)
+        results = filterTracks(request.args)
+        if len(results) is 0:
+            raise exceptions.NotFound()
+        else:
+            return deleteTrack(request.args)
         
-# def deleteTrack(deleteParams):
-    # trackID = deleteParams.get("trackID")
-    # trackTitle = deleteParams.get("trackTitle")
-    # trackAlbum = deleteParams.get("trackAlbum")
+def deleteTrack(deleteParams):
+    trackID = deleteParams.get("trackID")
+    trackTitle = deleteParams.get("trackTitle")
+    trackAlbum = deleteParams.get("trackAlbum")
     
-    # deleteQuery = "DELETE * FROM tracks WHERE"
-    # selectQuery = "SELECT * FROM tracks WHERE"
-    # to_filter = []
+    deleteQuery = "DELETE FROM tracks WHERE"
+    to_filter = []
     
-    # if trackID:
-        # deleteQuery += ' trackID=? AND'
-        # selectQuery += ' trackID=? AND'
-        # to_filter.append(id)
-    # if trackTitle:
-        # deleteQuery += ' trackTitle=? AND'
-        # selectQuery += ' trackTitle=? AND'
-        # to_filter.append(title)
-    # if trackAlbum:
-        # deleteQuery += ' trackAlbum=? AND'
-        # selectQuery += ' trackAlbum=? AND'
-        # to_filter.append(albumTitle)
-    # if not (id or title or albumTitle):
-        # raise exceptions.NotFound() 
-    
-    #do a SELECT statement to check if the items are in the database, if they are not throw this
-    #selectQuery = selectQuery[:-4] + ';'
-    #if not trackQueries._enging.execute(selectQuery, to_filter).fetchall():
-    #   
-    #   return jasonifier("ITEM COULD NOT BE FOUND", status.HTTP_404_NOT_FOUND)
-    #else:    
-    #   deleteQuery = deleteQuery[:-4] + ';'
+    if trackID:
+        deleteQuery += ' trackID=? AND'
+        to_filter.append(id)
+    if trackTitle:
+        deleteQuery += ' trackTitle=? AND'
+        to_filter.append(title)
+    if trackAlbum:
+        deleteQuery += ' trackAlbum=? AND'
+        to_filter.append(albumTitle)
+    if not (id or title or albumTitle):
+        raise exceptions.NotFound() 
+        
+    deleteQuery = deleteQuery[:-4] + ';'
 
-    #   trackQueries._engine.execute(deleteQuery, to_filter).fetchall()
-    #   return jasonifier("REQUEST ACCEPTED", status.HTTP_202_ACCEPTED)
+    results = trackQueries._engine.execute(deleteQuery, to_filter)
+    result = []
+    return result, status.HTTP_200_OK
 
 def createTrack(song):
     song = request.data
@@ -85,8 +79,7 @@ def createTrack(song):
     except Exception as e:
         return { 'error': str(e) }, status.HTTP_409_CONFLICT
         
-    #return song, status.HTTP_201_CREATED
-    return jasonifier(song, status.HTTP_201_CREATED)
+    return song, status.HTTP_201_CREATED
     
 def filterTracks(queryParams):
     trackID = queryParams.get("trackID")
@@ -112,4 +105,4 @@ def filterTracks(queryParams):
 
     results = trackQueries._engine.execute(query, to_filter).fetchall()
 
-    return jasonifier(list(map(dict, results)))
+    return list(map(dict, results))
