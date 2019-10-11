@@ -4,7 +4,7 @@ CREATE TABLE playlists (
     	playID INTEGER primary key,
     	playTitle TEXT NOT NULL,
     	playUserID INT,
-    	playDesc VARCHAR,
+    	playDesc TEXT,
 	playListOfTracks TEXT NOT NULL,
    	UNIQUE(playID),
 	FOREIGN KEY(playUserID) REFERENCES users (userID) ON DELETE CASCADE
@@ -13,13 +13,13 @@ CREATE TABLE playlists (
 DROP TABLE IF EXISTS tracks;
 CREATE TABLE tracks (
 	trackID INTEGER primary key,
-	trackTitle VARCHAR NOT NULL,
-	trackAlbum VARCHAR NOT NULL,
-	trackArtist VARCHAR NOT NULL,
+	trackTitle TEXT NOT NULL,
+	trackAlbum TEXT NOT NULL,
+	trackArtist TEXT NOT NULL,
 	trackLength INT NOT NULL,
-	trackMedia VARCHAR NOT NULL,
-	trackArt VARCHAR,
-	UNIQUE(trackID, trackMedia)
+	trackMediaURL TEXT NOT NULL,
+	trackArt TEXT,
+	UNIQUE(trackID, trackMediaURL, trackTitle)
 );
 
 DROP TABLE IF EXISTS users;
@@ -35,11 +35,12 @@ CREATE TABLE users (
 DROP TABLE IF EXISTS descriptions;
 CREATE TABLE descriptions (
 	descriptionID INTEGER PRIMARY KEY,
-	descriptionDesc TEXT,
-	trackID INT,
-	userID INT,
-	FOREIGN KEY(userID) REFERENCES users (userID) ON DELETE CASCADE,
-	FOREIGN KEY(trackID) REFERENCES tracks (trackID) ON DELETE CASCADE
+	descriptionDesc TEXT NOT NULL,
+	trackTitle TEXT NOT NULL,
+	userUserName TEXT NOT NULL,
+	trackMediaURL TEXT NOT NULL,
+	FOREIGN KEY(trackTitle) REFERENCES users (trackTitle) ON DELETE CASCADE,
+	FOREIGN KEY(userUserName) REFERENCES tracks (userUserName) ON DELETE CASCADE
 );
 
 COMMIT;
