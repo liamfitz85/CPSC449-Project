@@ -1,6 +1,6 @@
 #############################################################
 #TODO                                                                                                                         #
-#STILL NEED TO MAKE A DELETE FUNCTION AND CHECK FOR JSON#
+#STILL NEED TO MAKE A PARSE FUNCTION AND CHECK FOR JSON  #
 ############################################################
 
 import sys
@@ -50,9 +50,9 @@ def playlists():
 def deletePlaylist(deleteParams):
     playID = deleteParams.get("playID")
     playTitle = deleteParams.get("playTitle")
-    #userName = deleteParams.get("userName")
+    userName = deleteParams.get("userName")
     
-    deleteQuery = "DELETE FROM playlists WHERE"
+    deleteQuery = "DELETE FROM playlists WHERE playlists.playUserID = users.userID AND"
     to_filter = []
     
     if playID:
@@ -61,10 +61,10 @@ def deletePlaylist(deleteParams):
     if playTitle:
         deleteQuery += ' playTitle=? AND'
         to_filter.append(playTitle)
-    # if userName:
-        # deleteQuery += ' users.userName=? AND playlists.playUserID = users.userID AND'
-        # to_filter.append(userName)
-    if not (playID or playTitle):
+    if userName:
+        deleteQuery += ' users.userUserName=? AND'
+        to_filter.append(userName)
+    if not (playID or playTitle or userName):
         raise exceptions.NotFound() 
         
     deleteQuery = deleteQuery[:-4] + ';'
@@ -89,10 +89,10 @@ def createPlaylist(playlist):
 def filterPlaylists(queryParams):
     playID = queryParams.get("playID")
     playTitle = queryParams.get("playTitle")
-    #userName = queryParams.get("userName")
+    userName = queryParams.get("userName")
     
-    #query = "SELECT P.playID, P.playTitle, P.playDesc, P.playListOfTracks, U.userUserName FROM playlists as P, users as U WHERE"
-    query = "SELECT * FROM playlists WHERE"
+    query = "SELECT P.playID, P.playTitle, P.playDesc, P.playListOfTracks, U.userUserName FROM playlists as P, users as U WHERE P.playUserID = U.userID AND"
+    #query = "SELECT * FROM playlists WHERE"
     to_filter = []
     
     if playID:
@@ -101,10 +101,10 @@ def filterPlaylists(queryParams):
     if playTitle:
         query += ' playTitle=? AND'
         to_filter.append(playTitle)
-    # if userName:
-        # query += " U.userUserName = ? AND P.playUserID = U.userID AND"
-        # to_filter.append(userName)
-    if not (playID or playTitle):
+    if userName:
+        query += " U.userUserName = ? AND"
+        to_filter.append(userName)
+    if not (playID or playTitle or userName):
         raise exceptions.NotFound()  
         
      #############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############

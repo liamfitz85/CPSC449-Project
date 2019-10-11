@@ -46,20 +46,24 @@ def deleteTrack(deleteParams):
     trackID = deleteParams.get("trackID")
     trackTitle = deleteParams.get("trackTitle")
     trackAlbum = deleteParams.get("trackAlbum")
+    trackArtist = deleteParams.get("trackArtist")
     
     deleteQuery = "DELETE FROM tracks WHERE"
     to_filter = []
     
     if trackID:
         deleteQuery += ' trackID=? AND'
-        to_filter.append(id)
+        to_filter.append(trackID)
     if trackTitle:
         deleteQuery += ' trackTitle=? AND'
-        to_filter.append(title)
+        to_filter.append(trackTitle)
     if trackAlbum:
         deleteQuery += ' trackAlbum=? AND'
-        to_filter.append(albumTitle)
-    if not (id or title or albumTitle):
+        to_filter.append(trackAlbum)
+    if trackArtist:
+        deleteQuery += ' trackArtist=? AND'
+        to_filter.append(trackArtist)
+    if not (trackID or trackTitle or trackAlbum or trackArtist):
         raise exceptions.NotFound() 
         
     deleteQuery = deleteQuery[:-4] + ';'
@@ -85,20 +89,24 @@ def filterTracks(queryParams):
     trackID = queryParams.get("trackID")
     trackTitle = queryParams.get("trackTitle")
     trackAlbum = queryParams.get("trackAlbum")
+    trackArtist = queryParams.get("trackArtist")
     
     query = "SELECT * FROM tracks WHERE"
     to_filter = []
     
     if trackID:
         query += ' trackID=? AND'
-        to_filter.append(id)
+        to_filter.append(trackID)
     if trackTitle:
         query += ' trackTitle=? AND'
-        to_filter.append(title)
+        to_filter.append(trackTitle)
     if trackAlbum:
         query += ' trackAlbum=? AND'
-        to_filter.append(albumTitle)
-    if not (id or title or albumTitle):
+        to_filter.append(trackAlbum)
+    if trackArtist:
+        query += ' trackArtist=? AND'
+        to_filter.append(trackArtist)
+    if not (trackID or trackTitle or trackAlbum or trackArtist):
         raise exceptions.NotFound()
         
     query = query[:-4] + ';'
