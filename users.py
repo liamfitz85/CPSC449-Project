@@ -137,8 +137,8 @@ def update_password(username):
                 if affected == 0:
                     raise exceptions.ParseError('Update query failed')
                 else:
-                    user2['userPassword'] = user['userPassword']
-                    return user2, status.HTTP_200_OK
+                    user['userPassword'] = user['userPassword']
+                    return user, status.HTTP_200_OK
         return { 'Error': 'Login information invalid' }, status.HTTP_401_UNAUTHORIZED
     except Exception as e:
         return { 'Error': str(e) }, status.HTTP_409_CONFLICT

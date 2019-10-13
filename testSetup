@@ -1,3 +1,4 @@
 #!/bin/bash
 sqlite3 music.db < queries/initQueries/init_db.sql
+sqlite3 music.db < queries/initQueries/insert_test_data.sql
 foreman start

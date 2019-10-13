@@ -1,8 +1,0 @@
-INSERT INTO descriptions(descriptionDesc, trackTitle, userUserName)
-VALUES("this song sucks!", "HURT", "ad69");
-
-
-SELECT T.trackTitle FROM tracks AS T, descriptions AS D WHERE D.trackID = T.trackID
-
-
-SELECT T.trackMedia, U.userID FROM tracks AS T, descriptions AS D, users AS U WHERE D.trackTitle = T.trackTitle AND U.userUserName = D.userUserName AND U.userUserName ="ad69";
