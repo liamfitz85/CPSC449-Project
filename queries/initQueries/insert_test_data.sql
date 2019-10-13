@@ -21,15 +21,15 @@ VALUES("LUCAS SMASH", "smashmachine123", "lucasmash321@gmail.com", "123456");
 
 
 INSERT INTO playlists(playTitle, playUserID, playDesc, playListOfTracks)
-VALUES("First", 1, "", "wwww.track.ALIENBOY, wwww.track.MIRACLEMAN")
+VALUES("First", 1, "", "wwww.track.ALIENBOY, wwww.track.MIRACLEMAN");
 
 INSERT INTO playlists(playTitle, playUserID, playDesc, playListOfTracks)
-VALUES("Second", 2, "", "wwww.track.ALIENBOY, wwww.track.HURT")
+VALUES("Second", 2, "", "wwww.track.ALIENBOY, wwww.track.HURT");
 
 INSERT INTO playlists(playTitle, playUserID, playDesc, playListOfTracks)
-VALUES("Third", 1, "this is my second playlist", "wwww.track.MIRACLEMAN, wwww.track.HURT")
+VALUES("Third", 1, "this is my second playlist", "wwww.track.MIRACLEMAN, wwww.track.HURT");
 
 INSERT INTO playlists(playTitle, playUserID, playDesc, playListOfTracks)
-VALUES("Fourth", 3, "why", "wwww.track.ALIENBOY, wwww.track.MIRACLEMAN, wwww.track.HURT")
+VALUES("Fourth", 3, "why", "wwww.track.ALIENBOY, wwww.track.MIRACLEMAN, wwww.track.HURT");
 
 
