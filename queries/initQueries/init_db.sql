@@ -43,6 +43,14 @@ CREATE TABLE descriptions (
 	FOREIGN KEY(trackMediaURL) REFERENCES users (trackMediaURL) ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS trackLists;
+CREATE TABLE trackLists(
+	trackListPlayID INT,
+	trackListURL TEXT,
+	FOREIGN KEY(trackListPlayID) REFERENCES playlists (playID) on DELETE CASCADE,
+	FOREIGN KEY(trackListURL) REFERENCES tracks (trackMediaURL) on DELETE CASCADE
+);
+
 COMMIT;
 
 
