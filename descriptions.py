@@ -4,7 +4,7 @@ import pugsql
 from flask import request, jsonify, Response
 from flask_api import status, exceptions
 
-app = flask_api.FlaskAPI(__name__)
+app = flask_api.FlaskAPI(__name__,static_url_path='')
 app.config.from_envvar('APP_CONFIG')
 
 queries = pugsql.module('queries/descriptionQueries/')

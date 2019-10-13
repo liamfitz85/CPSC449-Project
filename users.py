@@ -115,9 +115,9 @@ def authenticate():
         return { 'Error': str(e) }, status.HTTP_409_CONFLICT
 
 
-@app.route('/api/v1/users/<string:username>/password', methods=['PUT'])
+@app.route('/api/v1/users/<string:username>/password', methods=['PATCH'])
 def password(username):
-    if request.method=='PUT':
+    if request.method=='PATCH':
         valid = validContentType(request)
         if valid is not True:
             return valid

@@ -143,7 +143,7 @@ echo "--------------------------------------------------------------------------
 
 echo "POSITIVE CASE: Update password"
 curl --verbose \
-	--request PUT \
+	--request PATCH \
 	--header 'Content-Type: application/json' \
 	--data @test/user/updatepassword.json \
 	http://127.0.0.1:5000/api/v1/users/WassupMan404/password
@@ -176,7 +176,7 @@ echo
 echo "NEGATIVE CASE: Update password - user doesn't exist"
 echo "----------------------------------------------------------------------------------"
 curl --verbose \
-	--request PUT \
+	--request PATCH \
 	--header 'Content-Type: application/json' \
 	--data @test/user/updatepassword2.json \
 	http://127.0.0.1:5000/api/v1/users/WassupMan4daffaf04/password

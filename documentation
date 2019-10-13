@@ -1,0 +1,79 @@
+Descriptions Microservice
+    URL: /api/v1/descriptions/
+    Usage:   
+        POST: Create description for a track.
+            Expect: 
+                    Header to have: 'Content-Type: application/json'
+                    Data is a json that contains
+                        {
+                            "trackMediaURL": "inputhere",
+                            "userUserName": "inputhere",
+                            "descriptionDesc": "inputhere"
+                        }
+
+    URL: /api/v1/users/<string:username>/descriptions
+    Usage: 
+        GET: Get user description of track by trackMediaURL.
+            Example: http://127.0.0.1:5300/api/v1/users/ad69/descriptions?trackMediaURL=wwww%2Etrack%2EHURT
+
+    URL: /api/v1/users/<string:username>/descriptions/all
+    Usage:
+        GET: Get all descriptions from the user.
+            Example: http://127.0.0.1:5300/api/v1/users/invalid/descriptions/all
+
+
+Users Microservice
+    URL: /api/v1/users/register
+    Usage:
+        GET: Get all user informations from users table.
+            Example: http://127.0.0.1:5000/api/v1/users/register
+        POST: Register a user into the database
+            Expect: 
+                    Header to have: 'Content-Type: application/json'
+                    Data is a json that contains
+                        {
+                            "userName": "inputhere",
+                            "userUserName": "inputhere",
+                            "userEmail": "inputhere",
+                            "userPassword": "inputhere"
+                        }
+
+    URL: /api/v1/users/id/<int:id>
+    Usage:
+        GET: Get all informations except password for user from user id.
+            Example: http://127.0.0.1:5000/api/v1/users/id/1
+        DELETE: Delete user from user table by user id.
+            Example:
+                    curl --verbose \
+                    --header 'Content-Type: application/json' \
+                    --request DELETE \
+                    http://127.0.0.1:5000/api/v1/users/id/2
+
+    URL: /api/v1/users/<string:username>
+    Usage:
+        GET:  Get all informations except password for user from user username.
+            Example: http://127.0.0.1:5000/api/v1/users/WassupMan404
+
+    URL: /api/v1/users/login
+    Usage:
+        POST: Authenticate user login informations.
+            Expect: 
+                    Header to have: 'Content-Type: application/json'
+                    Data is a json that contains
+                        {
+                            "userUserName": "inputhere",
+                            "userPassword": "inputhere"
+                        }
+
+    URL: /api/v1/users/<string:username>/password
+    Usage:
+        PATCH: Update user password.
+            Example: http://127.0.0.1:5000/api/v1/users/WassupMan404/password
+            Expect:
+                    Header to have: 'Content-Type: application/json'
+                    Data is a json that contains
+                        {
+                            "userUserName": "inputhere",
+                            "userPassword": "inputhere",
+                            "userNewPassword": "inputhere"
+                        }

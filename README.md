@@ -9,3 +9,4 @@ Procfile can set environment variables per line.
 .cfg files contain environment variables for each specific microservice.
 --descriptions.cfg has a test variable you can see by running foreman start and browse to the descriptions http://localhost:port/
 
+# See documentation file for how to use the api
