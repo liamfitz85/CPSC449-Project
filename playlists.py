@@ -1,7 +1,7 @@
 #############################################################
-#TODO                                                                                                                         #
-#STILL NEED TO MAKE A PARSE FUNCTION AND CHECK FOR JSON  #
-############################################################
+#TODO                                                       #
+#STILL NEED TO MAKE A PARSE FUNCTION AND CHECK FOR JSON     #
+#############################################################
 
 import sys
 from flask import request, jsonify
@@ -15,6 +15,12 @@ app.config.from_envvar("APP_CONFIG")
 plQueries = pugsql.module("queries/playlistQueries/")
 plQueries.connect(app.config["DATABASE_URL"])
 
+def validContentType(request, type='application/json'):
+    if request.headers.has_key('Content-Type'):
+        if request.headers['Content-Type'] == type:
+            return True
+    return { 'Error':'Unsupported Media Type', 'Support-Content-Type':type}, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
+
 @app.route('/api/v1/', methods=['GET'])
 def home():
 	return "<h1>Music Collection<h1><p>This site is a prototype API for your music collection.</p><p>This is the playlist handler.</p>"
@@ -22,23 +28,36 @@ def home():
 @app.route("/api/v1/collections/playlists/all", methods = ["GET"])
 def allPlaylists():
     allPlaylists = plQueries.all_playlists()
-    return list(allPlaylists)
+    allPlaylists = list(allPlaylists)
+    if len(allPlaylists) is 0:
+        raise exceptions.NotFound()
+    else:
+        return allPlaylists
 
 @app.route("/api/v1/collections/playlists/<int:playID>", methods = ["GET"])
 def filterPlaylistsByID(playID):
     playlistByID = plQueries.playlist_by_id(playID=playID)
-    return list(playlistByID)
+    if len(playlistByID) is 0:
+        raise exceptions.NotFound()
+    else:
+        return playlistByID
     
-@app.route("/api/v1/users/<string:username>/playlists", methods = ["GET"]) #as requested by Duy
-def playlistByUsername(username):
-    playlistByUsername = plQueries.playlist_by_username(username = username)
-    return list(playlistByUsername)
+@app.route("/api/v1/users/<string:userUserName>/playlists", methods = ["GET"])
+def playlistByUsername(userUserName):
+    playlistByUsername = plQueries.playlist_by_username(userUserName = userUserName)
+    if len(playlistByUsername):
+        raise exceptions.NotFound()
+    else:
+        return playlistByUsername
     
 @app.route('/api/v1/collections/playlists', methods=['GET', 'POST', 'DELETE'])
 def playlists():
     if request.method == 'GET':
         return filterPlaylists(request.args)
     elif request.method == 'POST':
+        valid = validContentType(request)
+        if valid is not True:
+            return valid
         return createPlaylist(request.data)
     elif request.method == 'DELETE':
         result = filterPlaylists(request.args)
@@ -79,6 +98,8 @@ def createPlaylist(playlist):
     
     if not all([field in playlist for field in requiredFields]):
         raise exceptions.ParseError()
+    if "playDesc" not in playlist:
+        playlist["playDesc"] = None
     try:
         playlist['playID'] = plQueries.create_playlist(**playlist)
     except Exception as e:
@@ -92,7 +113,6 @@ def filterPlaylists(queryParams):
     userName = queryParams.get("userName")
     
     query = "SELECT P.playID, P.playTitle, P.playDesc, P.playListOfTracks, U.userUserName FROM playlists as P, users as U WHERE P.playUserID = U.userID AND"
-    #query = "SELECT * FROM playlists WHERE"
     to_filter = []
     
     if playID:
@@ -106,16 +126,13 @@ def filterPlaylists(queryParams):
         to_filter.append(userName)
     if not (playID or playTitle or userName):
         raise exceptions.NotFound()  
-        
-     #############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############IGNORE THIS#############
-     #I have no idea if this is right or not
-    # if buffer2 is not None:
-        # query = "SELECT playlists.playID, playlists.playTitle, playlist.playDesc, playlist.listOfTracks, users.userName FROM playlists INNER JOIN users ON playlists.playUserID = users.userID WHERE" + buffer
-    # else:
-        # query += buffer
      
     query = query[:-4] + ';'
 
     results = plQueries._engine.execute(query, to_filter).fetchall()
-    
-    return list(map(dict, results))
+    results = list(map(dict, results))
+
+    if len(results) is 0:
+        raise exceptions.NotFound()
+    else:
+        return results

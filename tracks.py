@@ -1,8 +1,3 @@
-#############################################################
-#TODO                                                                                                                          #
-#STILL NEED TO CREATE AN EDIT FUNCTION AND CHECK FOR JSON#
-#############################################################
-
 import sys
 from flask import request
 import flask_api
@@ -15,6 +10,12 @@ app.config.from_envvar("APP_CONFIG")
 trackQueries = pugsql.module("queries/trackQueries/")
 trackQueries.connect(app.config["DATABASE_URL"])
 
+def validContentType(request, type='application/json'):
+    if request.headers.has_key('Content-Type'):
+        if request.headers['Content-Type'] == type:
+            return True
+    return { 'Error':'Unsupported Media Type', 'Support-Content-Type':type}, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
+
 @app.route('/api/v1/', methods=['GET'])
 def home():
 	return "<h1>Music Collection<h1><p>This site is a prototype API for your music collection.</p><p>This is the track handler.</p>"
@@ -22,68 +23,81 @@ def home():
 @app.route("/api/v1/collections/tracks/all", methods = ["GET"])
 def allTracks():
     allTracks = trackQueries.all_tracks()
-    return list(allTracks)
+    allTracks = list(allTracks)
+    if len(allTracks) is 0:
+        raise exceptions.NotFound()
+    else:
+        return list(allTracks)
 
-@app.route("/api/v1/collections/tracks/<int:trackID>", methods = ["GET"])
+@app.route("/api/v1/collections/tracks/<int:trackID>", methods = ["GET", "DELETE"])
 def filterTrackByID(trackID):
-    trackByID = trackQueries.track_by_id(trackID=trackID)
-    return list(trackByID)
-    
-@app.route('/api/v1/collections/tracks', methods=['GET', 'POST', 'DELETE'])
+    if request.method == "GET":
+        trackByID = trackQueries.track_by_id(trackID=trackID)
+        if trackByID is None:
+            raise exceptions.NotFound()
+        return trackByID
+    elif request.method == "DELETE":
+        try:
+            affected = trackQueries.delete_by_id(trackID = trackID)
+            if affected == 0:
+                return { 'Error': "TRACK NOT FOUND" },status.HTTP_404_NOT_FOUND
+            else:
+                return { 'DELETE REQUEST ACCEPTED': str(trackID) }, status.HTTP_202_ACCEPTED               
+        except Exception as e:
+            return { 'Error': str(e) }, status.HTTP_409_CONFLICT
+
+
+        
+@app.route('/api/v1/collections/tracks', methods=['GET', 'POST', 'PATCH'])
 def tracks():
     if request.method == 'GET':
-        return filterTracks(request.args)
-    elif request.method == 'POST':
-        return createTrack(request.data)
-    elif request.method == 'DELETE':
         results = filterTracks(request.args)
         if len(results) is 0:
             raise exceptions.NotFound()
         else:
-            return deleteTrack(request.args)
-        
-def deleteTrack(deleteParams):
-    trackID = deleteParams.get("trackID")
-    trackTitle = deleteParams.get("trackTitle")
-    trackAlbum = deleteParams.get("trackAlbum")
-    trackArtist = deleteParams.get("trackArtist")
+            return results
+    elif request.method == 'POST':
+        valid = validContentType(request)
+        if valid is not True:
+            return valid
+        return createTrack(request.data)
+    elif request.method == 'PATCH':
+        valid = validContentType(request)
+        if valid is not True:
+            return valid
+        return editTrack(request.data)
     
-    deleteQuery = "DELETE FROM tracks WHERE"
-    to_filter = []
-    
-    if trackID:
-        deleteQuery += ' trackID=? AND'
-        to_filter.append(trackID)
-    if trackTitle:
-        deleteQuery += ' trackTitle=? AND'
-        to_filter.append(trackTitle)
-    if trackAlbum:
-        deleteQuery += ' trackAlbum=? AND'
-        to_filter.append(trackAlbum)
-    if trackArtist:
-        deleteQuery += ' trackArtist=? AND'
-        to_filter.append(trackArtist)
-    if not (trackID or trackTitle or trackAlbum or trackArtist):
-        raise exceptions.NotFound() 
-        
-    deleteQuery = deleteQuery[:-4] + ';'
 
-    results = trackQueries._engine.execute(deleteQuery, to_filter)
-    result = []
-    return result, status.HTTP_200_OK
-
-def createTrack(song):
-    song = request.data
-    requiredFields = ["trackTitle", "trackAlbum", "trackArtist", "trackLength", "trackMedia"]
+def createTrack(track):
+    track = request.data
+    requiredFields = ["trackTitle", "trackAlbum", "trackArtist", "trackLength", "trackMediaURL"]
     
-    if not all([field in song for field in requiredFields]):
+    if not all([field in track for field in requiredFields]):
         raise exceptions.ParseError()
+    if "trackArt" not in track:
+        track["trackArt"] = None
     try:
-        song['trackID'] = trackQueries.create_track(**song)
+        track['trackID'] = trackQueries.create_track(**track)
     except Exception as e:
         return { 'error': str(e) }, status.HTTP_409_CONFLICT
         
-    return song, status.HTTP_201_CREATED
+    return track, status.HTTP_201_CREATED
+    
+def editTrack(track):
+    track = request.data
+    requiredFields = ["trackID", "trackTitle", "trackAlbum", "trackArtist", "trackLength", "trackMediaURL", "trackArt"]
+    if not all([field in track for field in requiredFields]):
+        raise exceptions.ParseError()
+    else:
+        try:
+            affected = trackQueries.edit_track(**track)
+            if affected is 0:
+                raise exceptions.ParseError("Update Failed")
+            else:
+                result = trackQueries.track_by_id(**track)
+                return result, status.HTTP_200_OK
+        except Exception as e:
+            return {'error':str(e)}, status.HTTP_409_CONFLICT
     
 def filterTracks(queryParams):
     trackID = queryParams.get("trackID")
