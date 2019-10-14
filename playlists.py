@@ -34,77 +34,70 @@ def allPlaylists():
     else:
         return allPlaylists
 
-@app.route("/api/v1/collections/playlists/<int:playID>", methods = ["GET"])
+@app.route("/api/v1/collections/playlists/<int:playID>", methods = ["GET", "DELETE"])
 def filterPlaylistsByID(playID):
-    playlistByID = plQueries.playlist_by_id(playID=playID)
-    if len(playlistByID) is 0:
-        raise exceptions.NotFound()
-    else:
-        return playlistByID
+    if request.method == "GET":
+        playlistByID = plQueries.playlist_by_id(playID=playID)
+        if len(playlistByID) is 0:
+           raise exceptions.NotFound()
+        else:
+            return playlistByID
+    elif request.method == "DELETE":
+        try:
+            affected = plQueries.delete_by_id(playID = playID)
+            if affected == 0:
+                return { 'Error': "TRACK NOT FOUND" },status.HTTP_404_NOT_FOUND
+            else:
+                return { 'DELETE REQUEST ACCEPTED': str(playID) }, status.HTTP_202_ACCEPTED               
+        except Exception as e:
+            return { 'Error': str(e) }, status.HTTP_409_CONFLICT
+
+
     
-@app.route("/api/v1/users/<string:userUserName>/playlists", methods = ["GET"])
-def playlistByUsername(userUserName):
-    playlistByUsername = plQueries.playlist_by_username(userUserName = userUserName)
-    if len(playlistByUsername):
-        raise exceptions.NotFound()
-    else:
-        return playlistByUsername
+@app.route("/api/v1/users/<string:username>/playlists", methods = ["GET"])
+def playlistByUsername(username):
+    if request.method == "GET":
+        userUserName = username
+        stuff = plQueries.playlist_by_username(userUserName = userUserName)
+        # data = list(map(dict, stuff))
+        data = list(stuff)
+        if data:
+            return data
+        return { 'Error': "Not Found" }, status.HTTP_404_NOT_FOUND
+        
     
-@app.route('/api/v1/collections/playlists', methods=['GET', 'POST', 'DELETE'])
+@app.route('/api/v1/collections/playlists', methods=['GET', 'POST'])
 def playlists():
     if request.method == 'GET':
-        return filterPlaylists(request.args)
+        results = filterPlaylists(request.args)
+        if len(results) is 0:
+            raise exceptions.NotFound()
+        else:
+            return results
     elif request.method == 'POST':
         valid = validContentType(request)
         if valid is not True:
             return valid
+        # return request.data
         return createPlaylist(request.data)
-    elif request.method == 'DELETE':
-        result = filterPlaylists(request.args)
-        if len(result) is 0:
-            raise exceptions.NotFound()
-        else:
-            return deletePlaylist(request.args)
-        
-def deletePlaylist(deleteParams):
-    playID = deleteParams.get("playID")
-    playTitle = deleteParams.get("playTitle")
-    userName = deleteParams.get("userName")
-    
-    deleteQuery = "DELETE FROM playlists WHERE playlists.playUserID = users.userID AND"
-    to_filter = []
-    
-    if playID:
-        deleteQuery += ' playID=? AND'
-        to_filter.append(playID)
-    if playTitle:
-        deleteQuery += ' playTitle=? AND'
-        to_filter.append(playTitle)
-    if userName:
-        deleteQuery += ' users.userUserName=? AND'
-        to_filter.append(userName)
-    if not (playID or playTitle or userName):
-        raise exceptions.NotFound() 
-        
-    deleteQuery = deleteQuery[:-4] + ';'
-
-    results = plQueries._engine.execute(deleteQuery, to_filter)
-    result = []
-    return result, status.HTTP_200_OK
 
 def createPlaylist(playlist):
     playlist = request.data
     requiredFields = ["playTitle", "playUserID", "playListOfTracks"]
-    
     if not all([field in playlist for field in requiredFields]):
         raise exceptions.ParseError()
     if "playDesc" not in playlist:
-        playlist["playDesc"] = None
+        playlist["playDesc"] = ""
     try:
+        playlist['playListOfTracks'] = str(playlist['playListOfTracks'])
         playlist['playID'] = plQueries.create_playlist(**playlist)
+        listOfTracks = playlist.get("playListOfTracks")
+        for track in listOfTracks:
+            TrackURLID=plQueries.add_to_trackList(trackListPlayID=playlist['playID'], trackListURL = track)
+            if not TrackURLID:
+                raise exceptions.ParseError()
     except Exception as e:
         return { 'error': str(e) }, status.HTTP_409_CONFLICT
-        
     return playlist, status.HTTP_201_CREATED
     
 def filterPlaylists(queryParams):
@@ -116,10 +109,10 @@ def filterPlaylists(queryParams):
     to_filter = []
     
     if playID:
-        query += ' playID=? AND'
+        query += ' P.playID=? AND'
         to_filter.append(playID)
     if playTitle:
-        query += ' playTitle=? AND'
+        query += ' P.playTitle=? AND'
         to_filter.append(playTitle)
     if userName:
         query += " U.userUserName = ? AND"
@@ -132,7 +125,4 @@ def filterPlaylists(queryParams):
     results = plQueries._engine.execute(query, to_filter).fetchall()
     results = list(map(dict, results))
 
-    if len(results) is 0:
-        raise exceptions.NotFound()
-    else:
-        return results
+    return results

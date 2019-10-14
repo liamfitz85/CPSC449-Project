@@ -1,2 +1,4 @@
--- :name playlist_by_username :one
-SELECT P.playID, P.playTitle, P.playAlbum, P.desc, P.ListOfTracks, U.userName FROM playlist as P, users as U WHERE U.userName = :username AND P.playUserID = U.userID;
+-- :name playlist_by_username :many
+SELECT P.playID, P.playTitle, P.playDesc, P.playListOfTracks, U.userUserName 
+FROM playlists as P, users as U 
+WHERE U.userUserName = :userUserName AND P.playUserID = U.userID;

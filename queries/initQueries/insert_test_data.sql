@@ -24,7 +24,7 @@ INSERT INTO playlists(playTitle, playUserID, playDesc, playListOfTracks)
 VALUES("First", 1, "", "wwww.track.ALIENBOY, wwww.track.MIRACLEMAN");
 
 INSERT INTO playlists(playTitle, playUserID, playDesc, playListOfTracks)
-VALUES("Second", 2, "", "wwww.track.ALIENBOY, wwww.track.HURT");
+VALUES("Second", 1, "", "wwww.track.ALIENBOY, wwww.track.HURT");
 
 INSERT INTO playlists(playTitle, playUserID, playDesc, playListOfTracks)
 VALUES("Third", 1, "this is my second playlist", "wwww.track.MIRACLEMAN, wwww.track.HURT");

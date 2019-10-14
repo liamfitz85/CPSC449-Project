@@ -1,0 +1,448 @@
+{"playTitle": "bruh", "playUserID": 1, "playDesc": "", "playListOfTracks": "['wwww.track.ALIENBOY', 'wwww.track.MIRACLEMAN', 'wwww.track.HURT']", "playID": 5}
+
+
+testing retieve playlist_by_id
+----------------------------------------------------------
+{"playID": 1, "playTitle": "First", "playUserID": 1, "playDesc": "", "playListOfTracks": "wwww.track.ALIENBOY, wwww.track.MIRACLEMAN"}
+
+
+testing delete_by_id
+----------------------------------------------------------
+{"DELETE REQUEST ACCEPTED": "3"}
+
+
+testing list all playlists
+----------------------------------------------------------
+[{"playID": 1, "playTitle": "First", "playUserID": 1, "playDesc": "", "playListOfTracks": "wwww.track.ALIENBOY, wwww.track.MIRACLEMAN"}, {"playID": 2, "playTitle": "Second", "playUserID": 2, "playDesc": "", "playListOfTracks": "wwww.track.ALIENBOY, wwww.track.HURT"}, {"playID": 4, "playTitle": "Fourth", "playUserID": 3, "playDesc": "why", "playListOfTracks": "wwww.track.ALIENBOY, wwww.track.MIRACLEMAN, wwww.track.HURT"}, {"playID": 5, "playTitle": "bruh", "playUserID": 1, "playDesc": "", "playListOfTracks": "['wwww.track.ALIENBOY', 'wwww.track.MIRACLEMAN', 'wwww.track.HURT']"}]
+
+
+testing retieve playlist_by_user
+----------------------------------------------------------
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <title>KeyError: None // Werkzeug Debugger</title>
+    <link rel="stylesheet" href="?__debugger__=yes&amp;cmd=resource&amp;f=style.css"
+        type="text/css">
+    <!-- We need to make sure this has a favicon so that the debugger does
+         not by accident trigger a request to /favicon.ico which might
+         change the application state. -->
+    <link rel="shortcut icon"
+        href="?__debugger__=yes&amp;cmd=resource&amp;f=console.png">
+    <script src="?__debugger__=yes&amp;cmd=resource&amp;f=jquery.js"></script>
+    <script src="?__debugger__=yes&amp;cmd=resource&amp;f=debugger.js"></script>
+    <script type="text/javascript">
+      var TRACEBACK = 139880726854792,
+          CONSOLE_MODE = false,
+          EVALEX = true,
+          EVALEX_TRUSTED = false,
+          SECRET = "7LRheruYDpi7YjixjTDk";
+    </script>
+  </head>
+  <body style="background-color: #fff">
+    <div class="debugger">
+<h1>KeyError</h1>
+<div class="detail">
+  <p class="errormsg">KeyError: None</p>
+</div>
+<h2 class="traceback">Traceback <em>(most recent call last)</em></h2>
+<div class="traceback">
+  
+  <ul><li><div class="frame" id="frame-139880726991200">
+  <h4>File <cite class="filename">"/home/student/.local/lib/python3.7/site-packages/flask/app.py"</cite>,
+      line <em class="line">1949</em>,
+      in <code class="function">full_dispatch_request</code></h4>
+  <div class="source "><pre class="line before"><span class="ws">        </span>self.try_trigger_before_first_request_functions()</pre>
+<pre class="line before"><span class="ws">        </span>try:</pre>
+<pre class="line before"><span class="ws">            </span>request_started.send(self)</pre>
+<pre class="line before"><span class="ws">            </span>rv = self.preprocess_request()</pre>
+<pre class="line before"><span class="ws">            </span>if rv is None:</pre>
+<pre class="line current"><span class="ws">                </span>rv = self.dispatch_request()</pre>
+<pre class="line after"><span class="ws">        </span>except Exception as e:</pre>
+<pre class="line after"><span class="ws">            </span>rv = self.handle_user_exception(e)</pre>
+<pre class="line after"><span class="ws">        </span>return self.finalize_request(rv)</pre>
+<pre class="line after"><span class="ws"></span> </pre>
+<pre class="line after"><span class="ws">    </span>def finalize_request(self, rv, from_error_handler=False):</pre></div>
+</div>
+
+<li><div class="frame" id="frame-139880726991872">
+  <h4>File <cite class="filename">"/home/student/.local/lib/python3.7/site-packages/flask/app.py"</cite>,
+      line <em class="line">1935</em>,
+      in <code class="function">dispatch_request</code></h4>
+  <div class="source "><pre class="line before"><span class="ws">            </span>getattr(rule, &quot;provide_automatic_options&quot;, False)</pre>
+<pre class="line before"><span class="ws">            </span>and req.method == &quot;OPTIONS&quot;</pre>
+<pre class="line before"><span class="ws">        </span>):</pre>
+<pre class="line before"><span class="ws">            </span>return self.make_default_options_response()</pre>
+<pre class="line before"><span class="ws">        </span># otherwise dispatch to the handler for that endpoint</pre>
+<pre class="line current"><span class="ws">        </span>return self.view_functions[rule.endpoint](**req.view_args)</pre>
+<pre class="line after"><span class="ws"></span> </pre>
+<pre class="line after"><span class="ws">    </span>def full_dispatch_request(self):</pre>
+<pre class="line after"><span class="ws">        </span>&quot;&quot;&quot;Dispatches the request and on top of that performs request</pre>
+<pre class="line after"><span class="ws">        </span>pre and postprocessing as well as HTTP exception catching and</pre>
+<pre class="line after"><span class="ws">        </span>error handling.</pre></div>
+</div>
+
+<li><div class="frame" id="frame-139880726991928">
+  <h4>File <cite class="filename">"/home/student/Desktop/projects/CPSC449-Project-01/playlists.py"</cite>,
+      line <em class="line">60</em>,
+      in <code class="function">playlistByUsername</code></h4>
+  <div class="source "><pre class="line before"><span class="ws"></span> </pre>
+<pre class="line before"><span class="ws"></span> </pre>
+<pre class="line before"><span class="ws"></span>@app.route(&quot;/api/v1/users/&lt;string:userUserName&gt;/playlists&quot;, methods = [&quot;GET&quot;])</pre>
+<pre class="line before"><span class="ws"></span>def playlistByUsername(userUserName):</pre>
+<pre class="line before"><span class="ws">    </span>userUserName = userUserName</pre>
+<pre class="line current"><span class="ws">    </span>playlistByUsername = plQueries.playlist_by_username(userUserName)</pre>
+<pre class="line after"><span class="ws">    </span>if playlistByUsername:</pre>
+<pre class="line after"><span class="ws">        </span>raise exceptions.NotFound()</pre>
+<pre class="line after"><span class="ws">    </span>else:</pre>
+<pre class="line after"><span class="ws">        </span>return playlistByUsername</pre>
+<pre class="line after"><span class="ws"></span> </pre></div>
+</div>
+
+<li><div class="frame" id="frame-139880726991144">
+  <h4>File <cite class="filename">"/home/student/.local/lib/python3.7/site-packages/pugsql/statement.py"</cite>,
+      line <em class="line">154</em>,
+      in <code class="function">__call__</code></h4>
+  <div class="source "><pre class="line before"><span class="ws"></span> </pre>
+<pre class="line before"><span class="ws">    </span>def __call__(self, *multiparams, **params):</pre>
+<pre class="line before"><span class="ws">        </span>self._assert_module()</pre>
+<pre class="line before"><span class="ws">        </span>multiparams, params = self._convert_params(multiparams, params)</pre>
+<pre class="line before"><span class="ws">        </span>with _compile_context(multiparams, params):</pre>
+<pre class="line current"><span class="ws">            </span>r = self._module._execute(self._text, *multiparams, **params)</pre>
+<pre class="line after"><span class="ws">        </span>return self.result.transform(r)</pre>
+<pre class="line after"><span class="ws"></span> </pre>
+<pre class="line after"><span class="ws">    </span>def _convert_params(self, multiparams, params):</pre>
+<pre class="line after"><span class="ws">        </span>def conv(x):</pre>
+<pre class="line after"><span class="ws">            </span>if isinstance(x, set):</pre></div>
+</div>
+
+<li><div class="frame" id="frame-139880726991816">
+  <h4>File <cite class="filename">"/home/student/.local/lib/python3.7/site-packages/pugsql/compiler.py"</cite>,
+      line <em class="line">106</em>,
+      in <code class="function">_execute</code></h4>
+  <div class="source "><pre class="line before"><span class="ws">            </span>return self._locals.session.execute(clause, multiparams or params)</pre>
+<pre class="line before"><span class="ws"></span> </pre>
+<pre class="line before"><span class="ws">        </span>if not self._engine:</pre>
+<pre class="line before"><span class="ws">            </span>raise NoConnectionError()</pre>
+<pre class="line before"><span class="ws"></span> </pre>
+<pre class="line current"><span class="ws">        </span>return self._engine.execute(clause, *multiparams, **params)</pre>
+<pre class="line after"><span class="ws"></span> </pre>
+<pre class="line after"><span class="ws">    </span>@property</pre>
+<pre class="line after"><span class="ws">    </span>def _dialect(self):</pre>
+<pre class="line after"><span class="ws">        </span>&quot;&quot;&quot;</pre>
+<pre class="line after"><span class="ws">        </span>Gets the dialect for the SQLAlchemy engine.</pre></div>
+</div>
+
+<li><div class="frame" id="frame-139880726991984">
+  <h4>File <cite class="filename">"/home/student/.local/lib/python3.7/site-packages/sqlalchemy/engine/base.py"</cite>,
+      line <em class="line">2179</em>,
+      in <code class="function">execute</code></h4>
+  <div class="source "><pre class="line before"><span class="ws">        </span>resource to be returned to the connection pool.</pre>
+<pre class="line before"><span class="ws"></span> </pre>
+<pre class="line before"><span class="ws">        </span>&quot;&quot;&quot;</pre>
+<pre class="line before"><span class="ws"></span> </pre>
+<pre class="line before"><span class="ws">        </span>connection = self._contextual_connect(close_with_result=True)</pre>
+<pre class="line current"><span class="ws">        </span>return connection.execute(statement, *multiparams, **params)</pre>
+<pre class="line after"><span class="ws"></span> </pre>
+<pre class="line after"><span class="ws">    </span>def scalar(self, statement, *multiparams, **params):</pre>
+<pre class="line after"><span class="ws">        </span>return self.execute(statement, *multiparams, **params).scalar()</pre>
+<pre class="line after"><span class="ws"></span> </pre>
+<pre class="line after"><span class="ws">    </span>def _execute_clauseelement(self, elem, multiparams=None, params=None):</pre></div>
+</div>
+
+<li><div class="frame" id="frame-139880726992152">
+  <h4>File <cite class="filename">"/home/student/.local/lib/python3.7/site-packages/sqlalchemy/engine/base.py"</cite>,
+      line <em class="line">988</em>,
+      in <code class="function">execute</code></h4>
+  <div class="source "><pre class="line before"><span class="ws">        </span>try:</pre>
+<pre class="line before"><span class="ws">            </span>meth = object_._execute_on_connection</pre>
+<pre class="line before"><span class="ws">        </span>except AttributeError:</pre>
+<pre class="line before"><span class="ws">            </span>raise exc.ObjectNotExecutableError(object_)</pre>
+<pre class="line before"><span class="ws">        </span>else:</pre>
+<pre class="line current"><span class="ws">            </span>return meth(self, multiparams, params)</pre>
+<pre class="line after"><span class="ws"></span> </pre>
+<pre class="line after"><span class="ws">    </span>def _execute_function(self, func, multiparams, params):</pre>
+<pre class="line after"><span class="ws">        </span>&quot;&quot;&quot;Execute a sql.FunctionElement object.&quot;&quot;&quot;</pre>
+<pre class="line after"><span class="ws"></span> </pre>
+<pre class="line after"><span class="ws">        </span>return self._execute_clauseelement(func.select(), multiparams, params)</pre></div>
+</div>
+
+<li><div class="frame" id="frame-139880726992208">
+  <h4>File <cite class="filename">"/home/student/.local/lib/python3.7/site-packages/sqlalchemy/sql/elements.py"</cite>,
+      line <em class="line">287</em>,
+      in <code class="function">_execute_on_connection</code></h4>
+  <div class="source "><pre class="line before"><span class="ws">            </span># self</pre>
+<pre class="line before"><span class="ws">            </span>return self</pre>
+<pre class="line before"><span class="ws"></span> </pre>
+<pre class="line before"><span class="ws">    </span>def _execute_on_connection(self, connection, multiparams, params):</pre>
+<pre class="line before"><span class="ws">        </span>if self.supports_execution:</pre>
+<pre class="line current"><span class="ws">            </span>return connection._execute_clauseelement(self, multiparams, params)</pre>
+<pre class="line after"><span class="ws">        </span>else:</pre>
+<pre class="line after"><span class="ws">            </span>raise exc.ObjectNotExecutableError(self)</pre>
+<pre class="line after"><span class="ws"></span> </pre>
+<pre class="line after"><span class="ws">    </span>def unique_params(self, *optionaldict, **kwargs):</pre>
+<pre class="line after"><span class="ws">        </span>&quot;&quot;&quot;Return a copy with :func:`bindparam()` elements replaced.</pre></div>
+</div>
+
+<li><div class="frame" id="frame-139880726992040">
+  <h4>File <cite class="filename">"/home/student/.local/lib/python3.7/site-packages/sqlalchemy/engine/base.py"</cite>,
+      line <em class="line">1067</em>,
+      in <code class="function">_execute_clauseelement</code></h4>
+  <div class="source "><pre class="line before"><span class="ws"></span> </pre>
+<pre class="line before"><span class="ws">        </span>distilled_params = _distill_params(multiparams, params)</pre>
+<pre class="line before"><span class="ws">        </span>if distilled_params:</pre>
+<pre class="line before"><span class="ws">            </span># ensure we don't retain a link to the view object for keys()</pre>
+<pre class="line before"><span class="ws">            </span># which links to the values, which we don't want to cache</pre>
+<pre class="line current"><span class="ws">            </span>keys = list(distilled_params[0].keys())</pre>
+<pre class="line after"><span class="ws">        </span>else:</pre>
+<pre class="line after"><span class="ws">            </span>keys = []</pre>
+<pre class="line after"><span class="ws"></span> </pre>
+<pre class="line after"><span class="ws">        </span>dialect = self.dialect</pre>
+<pre class="line after"><span class="ws">        </span>if &quot;compiled_cache&quot; in self._execution_options:</pre></div>
+</div>
+
+<li><div class="exc-divider">During handling of the above exception, another exception occurred:</div>
+<li><div class="frame" id="frame-139880726991368">
+  <h4>File <cite class="filename">"/home/student/.local/lib/python3.7/site-packages/flask/app.py"</cite>,
+      line <em class="line">2463</em>,
+      in <code class="function">__call__</code></h4>
+  <div class="source "><pre class="line before"><span class="ws"></span> </pre>
+<pre class="line before"><span class="ws">    </span>def __call__(self, environ, start_response):</pre>
+<pre class="line before"><span class="ws">        </span>&quot;&quot;&quot;The WSGI server calls the Flask application object as the</pre>
+<pre class="line before"><span class="ws">        </span>WSGI application. This calls :meth:`wsgi_app` which can be</pre>
+<pre class="line before"><span class="ws">        </span>wrapped to applying middleware.&quot;&quot;&quot;</pre>
+<pre class="line current"><span class="ws">        </span>return self.wsgi_app(environ, start_response)</pre>
+<pre class="line after"><span class="ws"></span> </pre>
+<pre class="line after"><span class="ws">    </span>def __repr__(self):</pre>
+<pre class="line after"><span class="ws">        </span>return &quot;&lt;%s %r&gt;&quot; % (self.__class__.__name__, self.name)</pre></div>
+</div>
+
+<li><div class="frame" id="frame-139880726991424">
+  <h4>File <cite class="filename">"/home/student/.local/lib/python3.7/site-packages/flask/app.py"</cite>,
+      line <em class="line">2449</em>,
+      in <code class="function">wsgi_app</code></h4>
+  <div class="source "><pre class="line before"><span class="ws">            </span>try:</pre>
+<pre class="line before"><span class="ws">                </span>ctx.push()</pre>
+<pre class="line before"><span class="ws">                </span>response = self.full_dispatch_request()</pre>
+<pre class="line before"><span class="ws">            </span>except Exception as e:</pre>
+<pre class="line before"><span class="ws">                </span>error = e</pre>
+<pre class="line current"><span class="ws">                </span>response = self.handle_exception(e)</pre>
+<pre class="line after"><span class="ws">            </span>except:  # noqa: B001</pre>
+<pre class="line after"><span class="ws">                </span>error = sys.exc_info()[1]</pre>
+<pre class="line after"><span class="ws">                </span>raise</pre>
+<pre class="line after"><span class="ws">            </span>return response(environ, start_response)</pre>
+<pre class="line after"><span class="ws">        </span>finally:</pre></div>
+</div>
+
+<li><div class="frame" id="frame-139880726991480">
+  <h4>File <cite class="filename">"/home/student/.local/lib/python3.7/site-packages/flask/app.py"</cite>,
+      line <em class="line">1866</em>,
+      in <code class="function">handle_exception</code></h4>
+  <div class="source "><pre class="line before"><span class="ws">            </span># if we want to repropagate the exception, we can attempt to</pre>
+<pre class="line before"><span class="ws">            </span># raise it with the whole traceback in case we can do that</pre>
+<pre class="line before"><span class="ws">            </span># (the function was actually called from the except part)</pre>
+<pre class="line before"><span class="ws">            </span># otherwise, we just raise the error again</pre>
+<pre class="line before"><span class="ws">            </span>if exc_value is e:</pre>
+<pre class="line current"><span class="ws">                </span>reraise(exc_type, exc_value, tb)</pre>
+<pre class="line after"><span class="ws">            </span>else:</pre>
+<pre class="line after"><span class="ws">                </span>raise e</pre>
+<pre class="line after"><span class="ws"></span> </pre>
+<pre class="line after"><span class="ws">        </span>self.log_exception((exc_type, exc_value, tb))</pre>
+<pre class="line after"><span class="ws">        </span>server_error = InternalServerError()</pre></div>
+</div>
+
+<li><div class="frame" id="frame-139880726991536">
+  <h4>File <cite class="filename">"/home/student/.local/lib/python3.7/site-packages/flask/_compat.py"</cite>,
+      line <em class="line">39</em>,
+      in <code class="function">reraise</code></h4>
+  <div class="source "><pre class="line before"><span class="ws">    </span>import collections.abc as collections_abc</pre>
+<pre class="line before"><span class="ws"></span> </pre>
+<pre class="line before"><span class="ws">    </span>def reraise(tp, value, tb=None):</pre>
+<pre class="line before"><span class="ws">        </span>if value.__traceback__ is not tb:</pre>
+<pre class="line before"><span class="ws">            </span>raise value.with_traceback(tb)</pre>
+<pre class="line current"><span class="ws">        </span>raise value</pre>
+<pre class="line after"><span class="ws"></span> </pre>
+<pre class="line after"><span class="ws">    </span>implements_to_string = _identity</pre>
+<pre class="line after"><span class="ws"></span> </pre>
+<pre class="line after"><span class="ws"></span>else:</pre>
+<pre class="line after"><span class="ws">    </span>iterkeys = lambda d: d.iterkeys()</pre></div>
+</div>
+
+<li><div class="frame" id="frame-139880726991256">
+  <h4>File <cite class="filename">"/home/student/.local/lib/python3.7/site-packages/flask/app.py"</cite>,
+      line <em class="line">2446</em>,
+      in <code class="function">wsgi_app</code></h4>
+  <div class="source "><pre class="line before"><span class="ws">        </span>ctx = self.request_context(environ)</pre>
+<pre class="line before"><span class="ws">        </span>error = None</pre>
+<pre class="line before"><span class="ws">        </span>try:</pre>
+<pre class="line before"><span class="ws">            </span>try:</pre>
+<pre class="line before"><span class="ws">                </span>ctx.push()</pre>
+<pre class="line current"><span class="ws">                </span>response = self.full_dispatch_request()</pre>
+<pre class="line after"><span class="ws">            </span>except Exception as e:</pre>
+<pre class="line after"><span class="ws">                </span>error = e</pre>
+<pre class="line after"><span class="ws">                </span>response = self.handle_exception(e)</pre>
+<pre class="line after"><span class="ws">            </span>except:  # noqa: B001</pre>
+<pre class="line after"><span class="ws">                </span>error = sys.exc_info()[1]</pre></div>
+</div>
+
+<li><div class="frame" id="frame-139880726991648">
+  <h4>File <cite class="filename">"/home/student/.local/lib/python3.7/site-packages/flask/app.py"</cite>,
+      line <em class="line">1951</em>,
+      in <code class="function">full_dispatch_request</code></h4>
+  <div class="source "><pre class="line before"><span class="ws">            </span>request_started.send(self)</pre>
+<pre class="line before"><span class="ws">            </span>rv = self.preprocess_request()</pre>
+<pre class="line before"><span class="ws">            </span>if rv is None:</pre>
+<pre class="line before"><span class="ws">                </span>rv = self.dispatch_request()</pre>
+<pre class="line before"><span class="ws">        </span>except Exception as e:</pre>
+<pre class="line current"><span class="ws">            </span>rv = self.handle_user_exception(e)</pre>
+<pre class="line after"><span class="ws">        </span>return self.finalize_request(rv)</pre>
+<pre class="line after"><span class="ws"></span> </pre>
+<pre class="line after"><span class="ws">    </span>def finalize_request(self, rv, from_error_handler=False):</pre>
+<pre class="line after"><span class="ws">        </span>&quot;&quot;&quot;Given the return value from a view function this finalizes</pre>
+<pre class="line after"><span class="ws">        </span>the request by converting it into a response and invoking the</pre></div>
+</div>
+
+<li><div class="frame" id="frame-139880726991704">
+  <h4>File <cite class="filename">"/home/student/.local/lib/python3.7/site-packages/flask_api/app.py"</cite>,
+      line <em class="line">96</em>,
+      in <code class="function">handle_user_exception</code></h4>
+  <div class="source "><pre class="line before"><span class="ws"></span> </pre>
+<pre class="line before"><span class="ws">        </span>blueprint_handlers = ()</pre>
+<pre class="line before"><span class="ws">        </span>handlers = self.error_handler_spec.get(request.blueprint)</pre>
+<pre class="line before"><span class="ws">        </span>if handlers is not None:</pre>
+<pre class="line before"><span class="ws">            </span>blueprint_handlers = handlers.get(None, ())</pre>
+<pre class="line current"><span class="ws">        </span>app_handlers = self.error_handler_spec[None].get(None, ())</pre>
+<pre class="line after"><span class="ws">        </span>if is_flask_legacy():</pre>
+<pre class="line after"><span class="ws">            </span>for typecheck, handler in chain(blueprint_handlers, app_handlers):</pre>
+<pre class="line after"><span class="ws">                </span>if isinstance(e, typecheck):</pre>
+<pre class="line after"><span class="ws">                    </span>return handler(e)</pre>
+<pre class="line after"><span class="ws">        </span>else:</pre></div>
+</div>
+</ul>
+  <blockquote>KeyError: None</blockquote>
+</div>
+
+<div class="plain">
+  <form action="/?__debugger__=yes&amp;cmd=paste" method="post">
+    <p>
+      <input type="hidden" name="language" value="pytb">
+      This is the Copy/Paste friendly version of the traceback.  <span
+      class="pastemessage">You can also paste this traceback into
+      a <a href="https://gist.github.com/">gist</a>:
+      <input type="submit" value="create paste"></span>
+    </p>
+    <textarea cols="50" rows="10" name="code" readonly>Traceback (most recent call last):
+  File &quot;/home/student/.local/lib/python3.7/site-packages/flask/app.py&quot;, line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File &quot;/home/student/.local/lib/python3.7/site-packages/flask/app.py&quot;, line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File &quot;/home/student/Desktop/projects/CPSC449-Project-01/playlists.py&quot;, line 60, in playlistByUsername
+    playlistByUsername = plQueries.playlist_by_username(userUserName)
+  File &quot;/home/student/.local/lib/python3.7/site-packages/pugsql/statement.py&quot;, line 154, in __call__
+    r = self._module._execute(self._text, *multiparams, **params)
+  File &quot;/home/student/.local/lib/python3.7/site-packages/pugsql/compiler.py&quot;, line 106, in _execute
+    return self._engine.execute(clause, *multiparams, **params)
+  File &quot;/home/student/.local/lib/python3.7/site-packages/sqlalchemy/engine/base.py&quot;, line 2179, in execute
+    return connection.execute(statement, *multiparams, **params)
+  File &quot;/home/student/.local/lib/python3.7/site-packages/sqlalchemy/engine/base.py&quot;, line 988, in execute
+    return meth(self, multiparams, params)
+  File &quot;/home/student/.local/lib/python3.7/site-packages/sqlalchemy/sql/elements.py&quot;, line 287, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File &quot;/home/student/.local/lib/python3.7/site-packages/sqlalchemy/engine/base.py&quot;, line 1067, in _execute_clauseelement
+    keys = list(distilled_params[0].keys())
+AttributeError: 'list' object has no attribute 'keys'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;/home/student/.local/lib/python3.7/site-packages/flask/app.py&quot;, line 2463, in __call__
+    return self.wsgi_app(environ, start_response)
+  File &quot;/home/student/.local/lib/python3.7/site-packages/flask/app.py&quot;, line 2449, in wsgi_app
+    response = self.handle_exception(e)
+  File &quot;/home/student/.local/lib/python3.7/site-packages/flask/app.py&quot;, line 1866, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File &quot;/home/student/.local/lib/python3.7/site-packages/flask/_compat.py&quot;, line 39, in reraise
+    raise value
+  File &quot;/home/student/.local/lib/python3.7/site-packages/flask/app.py&quot;, line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File &quot;/home/student/.local/lib/python3.7/site-packages/flask/app.py&quot;, line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File &quot;/home/student/.local/lib/python3.7/site-packages/flask_api/app.py&quot;, line 96, in handle_user_exception
+    app_handlers = self.error_handler_spec[None].get(None, ())
+KeyError: None</textarea>
+  </form>
+</div>
+<div class="explanation">
+  The debugger caught an exception in your WSGI application.  You can now
+  look at the traceback which led to the error.  <span class="nojavascript">
+  If you enable JavaScript you can also use additional features such as code
+  execution (if the evalex feature is enabled), automatic pasting of the
+  exceptions and much more.</span>
+</div>
+      <div class="footer">
+        Brought to you by <strong class="arthur">DON'T PANIC</strong>, your
+        friendly Werkzeug powered traceback interpreter.
+      </div>
+    </div>
+
+    <div class="pin-prompt">
+      <div class="inner">
+        <h3>Console Locked</h3>
+        <p>
+          The console is locked and needs to be unlocked by entering the PIN.
+          You can find the PIN printed out on the standard output of your
+          shell that runs the server.
+        <form>
+          <p>PIN:
+            <input type=text name=pin size=14>
+            <input type=submit name=btn value="Confirm Pin">
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
+
+<!--
+
+Traceback (most recent call last):
+  File "/home/student/.local/lib/python3.7/site-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/student/.local/lib/python3.7/site-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/student/Desktop/projects/CPSC449-Project-01/playlists.py", line 60, in playlistByUsername
+    playlistByUsername = plQueries.playlist_by_username(userUserName)
+  File "/home/student/.local/lib/python3.7/site-packages/pugsql/statement.py", line 154, in __call__
+    r = self._module._execute(self._text, *multiparams, **params)
+  File "/home/student/.local/lib/python3.7/site-packages/pugsql/compiler.py", line 106, in _execute
+    return self._engine.execute(clause, *multiparams, **params)
+  File "/home/student/.local/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2179, in execute
+    return connection.execute(statement, *multiparams, **params)
+  File "/home/student/.local/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 988, in execute
+    return meth(self, multiparams, params)
+  File "/home/student/.local/lib/python3.7/site-packages/sqlalchemy/sql/elements.py", line 287, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "/home/student/.local/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 1067, in _execute_clauseelement
+    keys = list(distilled_params[0].keys())
+AttributeError: 'list' object has no attribute 'keys'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/student/.local/lib/python3.7/site-packages/flask/app.py", line 2463, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/student/.local/lib/python3.7/site-packages/flask/app.py", line 2449, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/student/.local/lib/python3.7/site-packages/flask/app.py", line 1866, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/student/.local/lib/python3.7/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/student/.local/lib/python3.7/site-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/student/.local/lib/python3.7/site-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/student/.local/lib/python3.7/site-packages/flask_api/app.py", line 96, in handle_user_exception
+    app_handlers = self.error_handler_spec[None].get(None, ())
+KeyError: None
+
+-->

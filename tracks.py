@@ -75,7 +75,7 @@ def createTrack(track):
     if not all([field in track for field in requiredFields]):
         raise exceptions.ParseError()
     if "trackArt" not in track:
-        track["trackArt"] = None
+        track["trackArt"] = ""
     try:
         track['trackID'] = trackQueries.create_track(**track)
     except Exception as e:
