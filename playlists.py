@@ -1,8 +1,3 @@
-#############################################################
-#TODO                                                       #
-#STILL NEED TO MAKE A PARSE FUNCTION AND CHECK FOR JSON     #
-#############################################################
-
 import sys
 from flask import request, jsonify
 import flask_api
@@ -38,7 +33,7 @@ def allPlaylists():
 def filterPlaylistsByID(playID):
     if request.method == "GET":
         playlistByID = plQueries.playlist_by_id(playID=playID)
-        if len(playlistByID) is 0:
+        if playlistByID is None:
            raise exceptions.NotFound()
         else:
             return playlistByID
@@ -59,7 +54,6 @@ def playlistByUsername(username):
     if request.method == "GET":
         userUserName = username
         stuff = plQueries.playlist_by_username(userUserName = userUserName)
-        # data = list(map(dict, stuff))
         data = list(stuff)
         if data:
             return data
@@ -78,7 +72,6 @@ def playlists():
         valid = validContentType(request)
         if valid is not True:
             return valid
-        # return request.data
         return createPlaylist(request.data)
 
 def createPlaylist(playlist):

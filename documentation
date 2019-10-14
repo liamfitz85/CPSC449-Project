@@ -77,3 +77,95 @@ Users Microservice
                             "userPassword": "inputhere",
                             "userNewPassword": "inputhere"
                         }
+
+Tracks Microservice
+    URL: /api/v1/collections/tracks/all
+    Usage:
+        GET: Get all tracks in the database
+            Example: http://127.0.0.1:5100/api/v1/collections/tracks/all
+
+    URL: /api/v1/collections/tracks/<int:trackID>/
+    Usage:
+        GET: Get the track with that trackID from the database
+            Example: http://127.0.0.1:5100/api/v1/collections/tracks/1
+        DELETE: Delete the track with that trackID from the database
+            Example: http://127.0.0.1:5100/api/v1/collections/tracks/1
+                    or
+                    curl --verbose \
+                         --request DELETE \
+                         --header 'Content-Type: application/json' \
+                         http://127.0.0.1:5100/api/v1/collections/tracks/1
+
+    URL: /api/v1/collections/tracks
+    Usage:
+        GET: Get the tracks with valid arguments in the URL
+            Expect:
+                It expects trackID, trackTitle, trackAlbum, or trackArtist in the arguments
+                    Example: http://127.0.0.1:5100/api/v1/collections/tracks?trackID=1
+        POST: Create a track and insert it into the database
+            Expect:
+                Header to have 'Content-Type: application/json'
+                Data is a json that contains
+                    {
+                        "trackTitle" : "inputHere",
+                        "trackAlbum" : "inputHere",
+                        "trackArtist" : "inputHere",
+                        "trackLength" : "inputHere",
+                        "trackMediaURL" : "inputHere"
+                        "trackArt" : "inputHere"
+                    }
+                "trackArt" is optional so it can be left out
+        PATCH: Update an already existing entry in the database
+            Expect:
+                Header to have 'Content-Type: application/json'
+                Data is a json that contains
+                    {
+                        "trackID" : "inputHere"
+                        "trackTitle" : "inputHere",
+                        "trackAlbum" : "inputHere",
+                        "trackArtist" : "inputHere",
+                        "trackLength" : "inputHere",
+                        "trackMediaURL" : "inputHere"
+                        "tracKArt" : "inputHere"
+                    }
+                
+Playlists Microservice
+    URL: /api/v1/collections/playlists/all
+    Usage:
+        GET: Retrieves all the playlists in the database
+            Example: http://127.0.0.1:5200/api/v1/collections/playlists/all
+
+    URL: /api/v1/collections/playlists/<int:playID>
+    Usage:
+        GET: Retrieves the playlist with that playID
+            Example: http://127.0.0.1:5200/api/v1/collections/playlists/1
+        DELETE: Deletes the playlist with that playID from the database
+            Example: http://127.0.0.1:5200/api/v1/collections/playlists/3
+                    or
+                    curl --verbose \
+                         --request DELETE \
+                         --header 'Content-Type: application/json' \
+                         http://127.0.0.1:5200/api/v1/collections/playlists/3
+
+    URL: /api/v1/users/<string:username>/playlists
+    Usage:
+        GET: Retrieves the playlists created by the user with this userUserName
+            Example:http://127.0.0.1:5200/api/v1/users/ad69/playlists
+
+    URL: /api/v1/collections/playlists
+    Usage:
+        GET: Retrieves the playlists with the given arguments
+            Expect:
+                It expects playID, playTitle, or userName passed as arguments
+                Example: http://127.0.0.1:5200/api/v1/collections/playlists?playID=1
+        POST: Create a playlist and insert it into the database. Parse the playListOfTracks and insert it into the database
+            Expect:
+                Header to have: 'Content-Type: application/json'
+                Data is a json that contains
+                    {
+	                    "playTitle" : "inputHere",
+	                    "playUserID": numHere,
+	                    "playDesc" : "inputHere",
+	                    "playListOfTracks" : ["inputOneHere", "inputTwoHere", "inputThreeHere"]
+                    }
+                "playDesc" is optional so it can be left out

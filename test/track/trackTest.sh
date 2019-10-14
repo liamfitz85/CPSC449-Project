@@ -22,7 +22,7 @@ echo
 echo 
 
 
-echo "testing post with missing fields"
+echo "testing post with missing fields failure"
 echo "----------------------------------------------------------"
 curl --verbose \
         --request POST \
@@ -45,6 +45,29 @@ echo
 echo 
 echo 
 
+echo "testing patch with a missing field"
+echo "----------------------------------------------------------"
+curl --verbose \
+        --request PATCH \
+        --header 'Content-Type: application/json' \
+        --data @test/track/editTrack2.json \
+        http://127.0.0.1:5100/api/v1/collections/tracks
+
+echo 
+echo 
+echo 
+
+echo "testing patch with an invalid field"
+echo "----------------------------------------------------------"
+curl --verbose \
+        --request PATCH \
+        --header 'Content-Type: application/json' \
+        --data @test/track/editTrack3.json \
+        http://127.0.0.1:5100/api/v1/collections/tracks
+echo 
+echo 
+echo 
+
 echo "testing get all track"
 echo "-------------------------------------------------------------"
 curl --verbose \
@@ -61,6 +84,17 @@ curl --verbose \
         --request GET \
         --header 'Content-Type: application/json' \
         http://127.0.0.1:5100/api/v1/collections/tracks/1
+
+echo 
+echo 
+echo 
+
+echo "testing get track_by_id failure"
+echo "-------------------------------------------------------------"
+curl --verbose \
+        --request GET \
+        --header 'Content-Type: application/json' \
+        http://127.0.0.1:5100/api/v1/collections/tracks/7
 echo 
 echo 
 echo 
@@ -71,6 +105,17 @@ curl --verbose \
         --request GET \
         --header 'Content-Type: application/json' \
         http://127.0.0.1:5100/api/v1/collections/tracks?trackID=1
+
+echo 
+echo 
+echo 
+
+echo "testing get filter_by_id failure"
+echo "-------------------------------------------------------------"
+curl --verbose \
+        --request GET \
+        --header 'Content-Type: application/json' \
+        http://127.0.0.1:5100/api/v1/collections/tracks?trackID=7
 echo 
 echo 
 echo 
@@ -81,6 +126,19 @@ curl --verbose \
         --request GET \
         --header 'Content-Type: application/json' \
         http://127.0.0.1:5100/api/v1/collections/tracks?trackTitle=icarus
+
+echo 
+echo 
+echo 
+
+echo "testing get filter_by_title"
+echo "-------------------------------------------------------------"
+curl --verbose \
+        --request GET \
+        --header 'Content-Type: application/json' \
+        http://127.0.0.1:5100/api/v1/collections/tracks?trackTitle=wawawaw
+
+        
 echo 
 echo 
 echo 
@@ -91,6 +149,17 @@ curl --verbose \
         --request GET \
         --header 'Content-Type: application/json' \
         http://127.0.0.1:5100/api/v1/collections/tracks?trackAlbum=vertigo
+
+echo 
+echo 
+echo 
+
+echo "testing get filter_by_album"
+echo "-------------------------------------------------------------"
+curl --verbose \
+        --request GET \
+        --header 'Content-Type: application/json' \
+        http://127.0.0.1:5100/api/v1/collections/tracks?trackAlbum=someName
 echo 
 echo 
 echo 
@@ -106,7 +175,29 @@ echo
 echo 
 echo 
 
+echo "testing get filter_by_artist"
+echo "-------------------------------------------------------------"
+curl --verbose \
+        --request GET \
+        --header 'Content-Type: application/json' \
+        http://127.0.0.1:5100/api/v1/collections/tracks?trackArtist=someDude
+
+echo 
+echo 
+echo 
+
 echo "testing get delete_by_id"
+echo "-------------------------------------------------------------"
+curl --verbose \
+        --request DELETE \
+        --header 'Content-Type: application/json' \
+        http://127.0.0.1:5100/api/v1/collections/tracks/1
+
+echo 
+echo 
+echo 
+
+echo "testing get delete_by_id failure"
 echo "-------------------------------------------------------------"
 curl --verbose \
         --request DELETE \
