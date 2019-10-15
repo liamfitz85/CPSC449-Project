@@ -1,0 +1,24 @@
+#!/bin/bash
+
+curl --verbose\
+	--request POST\
+	--header 'Content-Type: application/json' \
+	--data @json/add_description.json \
+	http://127.0.0.1:5300/api/v1/descriptions/
+
+curl --verbose\
+	--request POST\
+	--header 'Content-Type: application/json'\
+	--data @json/add_user.json\
+	http://127.0.0.1:5000/api/v1/users/register
+
+curl --verbose\
+	--request POST\
+	--header 'Content-Type: application/json'\
+	--data @json/add_track.json\
+	http://127.0.0.1:5100/api/v1/collections/tracks
+curl --verbose\
+	--request POST\
+	--header 'Content-Type: application/json'\
+	--data @json/add_playlist.json\
+	http://127.0.0.1:5200/api/v1/collections/playlists
