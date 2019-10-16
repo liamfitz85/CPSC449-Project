@@ -15,4 +15,5 @@ Wellson Pan - WellsonPan@csu.fullerton.edu<br />
 <b>To populate all microservices:<br /></b>
 &nbsp;&nbsp;./curl_requests
 
-<b>Schema is in queries/initQueries/init_db.sql</b><br />
+<b>Schema File:</b><br />
+&nbsp;&nbsp;queries/initQueries/init_db.sql<br />
