@@ -2,7 +2,7 @@
 
 Duy Do - duy.ado@csu.fullerton.edu
 Liam Fitzpatrick - lfitzpatrick0@csu.fullerton.edu
-Wellson Pan - 
+Wellson Pan - WellsonPan@csu.fullerton.edu
 
 <b>Usage:<br /></b> 
 &nbsp;&nbsp;if first run then:<br />
