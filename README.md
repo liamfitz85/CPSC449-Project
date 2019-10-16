@@ -1,10 +1,10 @@
 # CPSC449-Project-01
 <b>Usage:<br /></b> 
-	if first run then:<br />
-		./first_run <br /> 
-		./curl_requests <br />
-	else:
-		foreman start <br />
+&nbsp;&nbsp;if first run then:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;./first_run <br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;./curl_requests <br />
+&nbsp;&nbsp;else:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;foreman start <br />
 
 <b>To populate all microservices:<br /></b>
-	./curl_requests
+&nbsp;&nbsp;./curl_requests
