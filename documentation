@@ -111,7 +111,7 @@ Tracks Microservice
                         "trackAlbum" : "inputHere",
                         "trackArtist" : "inputHere",
                         "trackLength" : "inputHere",
-                        "trackMediaURL" : "inputHere"
+                        "trackMediaURL" : "inputHere",
                         "trackArt" : "inputHere"
                     }
                 "trackArt" is optional so it can be left out

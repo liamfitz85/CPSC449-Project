@@ -5,7 +5,7 @@ CREATE TABLE playlists (
     	playTitle TEXT NOT NULL,
     	playUserID INT,
     	playDesc TEXT,
-		playListOfTracks TEXT NOT NULL,
+	playListOfTracks TEXT NOT NULL,
 	FOREIGN KEY(playUserID) REFERENCES users (userID) ON DELETE CASCADE
 );
 
@@ -53,7 +53,3 @@ CREATE TABLE trackLists(
 );
 
 COMMIT;
-
-
-
-
