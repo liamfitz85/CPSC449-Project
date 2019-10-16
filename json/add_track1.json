@@ -1,8 +1,8 @@
 {
 	"trackTitle" : "Track title 01",
-	"trackAlbum" : "The first album",
-	"trackArtist" : "The first artist",
+	"trackAlbum" : "The 00 album",
+	"trackArtist" : "The 00 artist",
 	"trackLength" : "120",
 	"trackMediaURL" : "file:///music/artist/album/track01.mp3",
-	"trackArt" : "file:///music/art/ablum/1"
+	"trackArt" : "file:///music/art/ablum/01"
 }

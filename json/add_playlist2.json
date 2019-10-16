@@ -1,0 +1,6 @@
+{
+	"playTitle" : "Playlist 02",
+	"playUserID": 2,
+	"playDesc" : "This is my playlist for bad music.",
+	"playListOfTracks" : ["3", "6", "10"]
+}
