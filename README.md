@@ -1,8 +1,9 @@
 # CPSC449-Project-01
 
-Duy Do - duy.ado@csu.fullerton.edu
-Liam Fitzpatrick - lfitzpatrick0@csu.fullerton.edu
-Wellson Pan - WellsonPan@csu.fullerton.edu
+<b>Team Members</b><br />
+Duy Do - duy.ado@csu.fullerton.edu<br />
+Liam Fitzpatrick - lfitzpatrick0@csu.fullerton.edu<br />
+Wellson Pan - WellsonPan@csu.fullerton.edu<br />
 
 <b>Usage:<br /></b> 
 &nbsp;&nbsp;if first run then:<br />
