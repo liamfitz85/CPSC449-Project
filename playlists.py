@@ -86,8 +86,12 @@ def createPlaylist(playlist):
     try:
         playlist['playListOfTracks'] = str(playlist['playListOfTracks'])
         playlist['playID'] = plQueries.create_playlist(**playlist)
-        listOfTracks = playlist.get("playListOfTracks")
-        for track in listOfTracks:
+        #listOfTracks = playlist.get("playListOfTracks")
+        listOfTracks = []
+        for t in playlist.get("playListOfTracks"):
+            listOfTracks.append(t)
+        newList = "".join(listOfTracks)
+        for track in newList.split(","):
             TrackURLID=plQueries.add_to_trackList(trackListPlayID=playlist['playID'], trackListURL = track)
             if not TrackURLID:
                 raise exceptions.ParseError()
