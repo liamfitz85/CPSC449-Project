@@ -40,8 +40,10 @@ def filterPlaylistsByID(playID):
     elif request.method == "DELETE":
         try:
             affected = plQueries.delete_by_id(playID = playID)
-            if affected == 0:
-                return { 'Error': "TRACK NOT FOUND" },status.HTTP_404_NOT_FOUND
+            trackListPlayID = playID
+            affected2 = plQueries.delete_from_trackLists(trackListPlayID = trackListPlayID)
+            if affected == 0 or affected2 == 0:
+                return { 'Error': "PLAYLIST NOT FOUND" },status.HTTP_404_NOT_FOUND
             else:
                 return { 'DELETE REQUEST ACCEPTED': str(playID) }, status.HTTP_202_ACCEPTED               
         except Exception as e:
