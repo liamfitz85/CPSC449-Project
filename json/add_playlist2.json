@@ -2,5 +2,5 @@
 	"playTitle" : "Playlist 02",
 	"playUserID": 2,
 	"playDesc" : "This is my playlist for bad music.",
-	"playListOfTracks" : ["3", "6", "10"]
+	"playListOfTracks" : ["file:///music/artist/album/track02.mp3", "file:///music/artist/album/track05.mp3", "file:///music/artist/album/track09.mp3"]
 }
