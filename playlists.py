@@ -84,19 +84,16 @@ def createPlaylist(playlist):
     if "playDesc" not in playlist:
         playlist["playDesc"] = ""
     try:
+        tempList = list(playlist['playListOfTracks'])
         playlist['playListOfTracks'] = str(playlist['playListOfTracks'])
         playlist['playID'] = plQueries.create_playlist(**playlist)
         listOfTracks = []
-        for t in playlist.get("playListOfTracks"):
-            listOfTracks.append(t)
-        #TODO
-        #Remove the brackets from the list
-        newList = str("".join(listOfTracks))
-        for track in newList.split(","):
+        for track in tempList:
+            listOfTracks.append(track)
+        for track in listOfTracks:
             TrackURLID=plQueries.add_to_trackList(trackListPlayID=playlist['playID'], trackListURL = track)
             if not TrackURLID:
                 raise exceptions.ParseError()
-        print(newList)
     except Exception as e:
         return { 'error': str(e) }, status.HTTP_409_CONFLICT
     return playlist, status.HTTP_201_CREATED
