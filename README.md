@@ -1,4 +1,4 @@
-# CPSC449-Project-01
+# CPSC449-Project
 
 <b>Team Members</b><br />
 Wellson Pan - WellsonPan@csu.fullerton.edu - Dev 1<br />
