@@ -1,45 +1,41 @@
-import requests
-import json
-
+import json, requests
 from xspf import xspf
 
 x = xspf.Xspf()
 
-r = requests.get("http://localhost:5200/api/v1/collections/playlists/all")
-t = requests.get("http://localhost:5100/api/v1/collections/tracks/all")
-playlist_list = r.json()
-track_list = t.json()
+playlists = requests.get("http://localhost:5200/api/v1/collections/playlists/all").json()
+tracks = requests.get("http://localhost:5100/api/v1/collections/tracks/all").json()
 
+def getPlayListByID(id, playlists):
+    for playlist in playlists:
+        if playlist['playID'] == id:
+            return playlist
+    return
 
-file_urls = []
+def getPlayListURLs(playlist):
+    urls = playlist['playListOfTracks'].strip('[]').split(',')
+    playlist_urls = []
+    for url in urls:
+        playlist_urls.append(url.strip(' ').strip('\''))
+    return playlist_urls
 
-#print(playlist_list)
-for i in playlist_list:
-    #print(i['playListOfTracks'])
-    tr = i['playListOfTracks'].strip('[]').split(',')
-    for el in tr:
-        #print(el)
-        el = el.strip(' ').strip('\'')
-        #print(el)
-        file_urls.append(el)
+def getTrackInfoFromURL(urls, tracks, playlistTitle):
+    print(playlistTitle)
+    for url in urls:
+        for track in tracks:
+            if url in track['trackMediaURL']:
+                # print(track['trackTitle'])
+                print(track)
 
-        for f in file_urls:
-            x.title = i['playTitle']
-            #print(f)
-            a = xspf.Track()
-            for t in track_list:
-                if f == t['trackMediaURL']:
-                    print(i['playTitle'],i['playUserID'],i['playDesc'],t['trackID'], t['trackTitle'], t['trackAlbum'], t['trackArtist'], sep='\n')
-                    #a.title = t['trackTitle']
-                    #a.album = t['trackAlbum']
-                    #x.add_track(a)
+        
+playlist = getPlayListByID(2, playlists)
+tracklist = getPlayListURLs(playlist)
 
-        file_urls=[]
+# print(type(tracklist))
+# print(tracklist[0])
 
-#print(x.toXml())
+# getTrackInfoFromURL(playlist, tracklist)
 
-# import xml.dom.minidom
+# getTrackInfoFromURL(playlist, tracklist)
 
-# dom = xml.dom.minidom.parseString(x.toXml())
-
-# print(dom.toprettyxml())
+getTrackInfoFromURL(tracklist, tracks, playlist['playTitle'])
