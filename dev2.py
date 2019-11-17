@@ -39,3 +39,5 @@ tracklist = getPlayListURLs(playlist)
 # getTrackInfoFromURL(playlist, tracklist)
 
 getTrackInfoFromURL(tracklist, tracks, playlist['playTitle'])
+
+print("test")
