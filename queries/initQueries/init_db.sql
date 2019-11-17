@@ -9,18 +9,6 @@ CREATE TABLE playlists (
 	FOREIGN KEY(playUserID) REFERENCES users (userID) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS tracks;
-CREATE TABLE tracks (
-	trackID INTEGER primary key,
-	trackTitle TEXT NOT NULL,
-	trackAlbum TEXT NOT NULL,
-	trackArtist TEXT NOT NULL,
-	trackLength INT NOT NULL,
-	trackMediaURL TEXT NOT NULL,
-	trackArt TEXT,
-	UNIQUE(trackMediaURL)
-);
-
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
 	userID INTEGER PRIMARY KEY,
