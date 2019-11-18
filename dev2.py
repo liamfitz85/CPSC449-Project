@@ -3,7 +3,6 @@ from xspf import xspf
 from flask import request, jsonify, Response
 import flask_api
 from flask_api import status, exceptions
-
 app = flask_api.FlaskAPI(__name__,static_url_path='')
 # app.config.from_envvar('APP_CONFIG') # maybe
 
@@ -14,13 +13,13 @@ def getPlayListByID(id, playlists):
     return
 
 def getUserByID(id):
-    userstr = "http://localhost:5000/api/v1/users/id/%d" % (id)
+    userstr = "http://localhost:8000/api/v1/users/id/%d" % (id)
     user = requests.get(userstr).json()
     # print(user)
     return user
 
 def getDescriptionByUser(uid):
-    descstr = "http://localhost:5300/api/v1/users/%s/descriptions/all" % (uid)
+    descstr = "http://localhost:8000/api/v1/descriptions/users/%s/descriptions/all" % (uid)
     desc = requests.get(descstr).json()
     return desc
 
@@ -89,8 +88,8 @@ import xml.dom.minidom
 
 @app.route("/api/v1/collections/playlists/<int:playID>/xspf", methods = ['GET'])
 def generate_xspf(playID):
-    playlists = requests.get("http://localhost:5200/api/v1/collections/playlists/all").json()
-    tracks = requests.get("http://localhost:5100/api/v1/collections/tracks/all").json()
+    playlists = requests.get("http://localhost:8000/api/v1/collections/playlists/all").json()
+    tracks = requests.get("http://localhost:8000/api/v1/collections/tracks/all").json()
     playlist = getPlayListByID(playID, playlists)
     print(playlist)
     tracklist = getPlayListURLs(playlist)

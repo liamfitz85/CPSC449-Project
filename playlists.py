@@ -51,7 +51,7 @@ def filterPlaylistsByID(playID):
 
 
     
-@app.route("/api/v1/users/<string:username>/playlists", methods = ["GET"])
+@app.route("/api/v1/collections/playlists/users/<string:username>/playlists", methods = ["GET"])
 def playlistByUsername(username):
     if request.method == "GET":
         userUserName = username

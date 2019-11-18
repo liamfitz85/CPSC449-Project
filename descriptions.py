@@ -43,7 +43,7 @@ def create_description():
 	return description, status.HTTP_201_CREATED
 
 #route to GET user descriptions of a track using url
-@app.route('/api/v1/users/<string:username>/descriptions', methods=['GET'])
+@app.route('/api/v1/descriptions/users/<string:username>/descriptions', methods=['GET'])
 def user_description(username):
 	if request.method =='GET':
 		return filter_descriptions(request.args)
@@ -65,7 +65,7 @@ def filter_descriptions(query_parameters):
 	return { 'Error': str("Not Found") }, status.HTTP_404_NOT_FOUND
 
 #route to GET user all  by user
-@app.route('/api/v1/users/<string:username>/descriptions/all', methods=['GET'])
+@app.route('/api/v1/descriptions/users/<string:username>/descriptions/all', methods=['GET'])
 def user_description_all(username):
 	if request.method =='GET':
 		userUserName = username
