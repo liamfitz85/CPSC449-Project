@@ -1,5 +1,7 @@
 #python -mjson.tool
 
+##########################################################################
+########################Delete if Service/Route already exist#############
 curl -i -X DELETE \
 --url http://localhost:8001/routes/playlist-route
 
