@@ -61,9 +61,7 @@ def generate_xspf(playID):
     playlists = requests.get("http://localhost:8000/api/v1/collections/playlists/all").json()
     tracks = requests.get("http://localhost:8000/api/v1/collections/tracks/all").json()
     playlist = getPlayListByID(playID, playlists)
-    print(playlist)
     tracklist = getPlayListURLs(playlist)
-    print(tracklist)
     xspf_playlist = getTrackInfoFromURL(tracklist, tracks, playlist)
 
     return xml.dom.minidom.parseString(xspf_playlist.toXml()).toprettyxml(), status.HTTP_200_OK
