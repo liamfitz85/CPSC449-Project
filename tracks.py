@@ -133,6 +133,7 @@ def editTrack(track):
         raise exceptions.ParseError()
     else:
         try:
+            track["trackID"] = uuid.UUID(track["trackID"])
             shardKey = track["trackID"].int % 3
             if shardKey == 0:
                 affected = trackQueries.edit_track(**track)

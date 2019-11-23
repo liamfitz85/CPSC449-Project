@@ -30,13 +30,10 @@ def description():
 
 def create_description():
 	description = request.data
-	required_fields = ['descriptionDesc','trackMediaURL','userUserName']
+	required_fields = ['trackTitle','descriptionDesc','trackMediaURL','userUserName']
 	if not all([field in description for field in required_fields]):
 		raise exceptions.ParseError()
 	try:
-		# result= queries.track_by_trackMediaURL(**description)
-		# description['trackTitle'] = result['trackTitle']
-		description["trackTitle"] = ''
 		description['descriptionID'] = queries.create_description(**description)
 	except Exception as e:
 		return { 'Error': str(e) }, status.HTTP_409_CONFLICT
