@@ -56,12 +56,11 @@ def getTrackInfoFromURL(urls, tracks, playlist):
                 x.add_track(tr)
     return x
 
-@app.route("/api/v1/collections/playlists/<int:playID>/xspf", methods = ['GET'])
+@app.route("/api/v1/collections/playlists/<int:playID>.xspf", methods = ['GET'])
 def generate_xspf(playID):
     playlists = requests.get("http://localhost:8000/api/v1/collections/playlists/all").json()
     tracks = requests.get("http://localhost:8000/api/v1/collections/tracks/all").json()
     playlist = getPlayListByID(playID, playlists)
     tracklist = getPlayListURLs(playlist)
     xspf_playlist = getTrackInfoFromURL(tracklist, tracks, playlist)
-
-    return xml.dom.minidom.parseString(xspf_playlist.toXml()).toprettyxml(), status.HTTP_200_OK
+    return xspf_playlist.toXml(), status.HTTP_200_OK

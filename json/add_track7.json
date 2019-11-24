@@ -3,6 +3,6 @@
 	"trackAlbum" : "The 00 album",
 	"trackArtist" : "The 00 artist",
 	"trackLength" : "120",
-	"trackMediaURL" : "file:///music/artist/album/track07.mp3",
+	"trackMediaURL" : "http://localhost:8000/media/song07.mp3",
 	"trackArt" : "file:///music/art/ablum/07"
 }

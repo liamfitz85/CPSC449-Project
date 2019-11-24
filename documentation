@@ -3,6 +3,12 @@ Duy Do - duy.ado@csu.fullerton.edu
 Liam Fitzpatrick - lfitzpatrick0@csu.fullerton.edu
 Wellson Pan - WellsonPan@csu.fullerton.edu
 
+XSPF Microservice
+    URL: /api/v1/collections/playlists/<int:id>.xspf
+    Usage:
+        GET: Create and return an xspf file for use
+            Example: http://127.0.0.1:5400/api/v1/collections/playlists/1.xspf
+
 Descriptions Microservice
     URL: /api/v1/descriptions/
     Usage:   
@@ -13,25 +19,26 @@ Descriptions Microservice
                         {
                             "trackMediaURL": "inputhere",
                             "userUserName": "inputhere",
-                            "descriptionDesc": "inputhere"
+                            "descriptionDesc": "inputhere",
+                            "trackTitle": "inputhere"
                         }
 
     URL: /api/v1/users/<string:username>/descriptions
     Usage: 
         GET: Get user description of track by trackMediaURL.
-            Example: http://127.0.0.1:5300/api/v1/users/ad69/descriptions?trackMediaURL=wwww%2Etrack%2EHURT
+            Example: http://127.0.0.1:8000/api/v1/users/ad69/descriptions?trackMediaURL=wwww%2Etrack%2EHURT
 
     URL: /api/v1/users/<string:username>/descriptions/all
     Usage:
         GET: Get all descriptions from the user.
-            Example: http://127.0.0.1:5300/api/v1/users/invalid/descriptions/all
+            Example: http://127.0.0.1:8000/api/v1/users/invalid/descriptions/all
 
 
 Users Microservice
     URL: /api/v1/users/register
     Usage:
         GET: Get all user informations from users table.
-            Example: http://127.0.0.1:5000/api/v1/users/register
+            Example: http://127.0.0.1:8000/api/v1/users/register
         POST: Register a user into the database
             Expect: 
                     Header to have: 'Content-Type: application/json'
@@ -46,18 +53,18 @@ Users Microservice
     URL: /api/v1/users/id/<int:id>
     Usage:
         GET: Get all informations except password for user from user id.
-            Example: http://127.0.0.1:5000/api/v1/users/id/1
+            Example: http://127.0.0.1:8000/api/v1/users/id/1
         DELETE: Delete user from user table by user id.
             Example:
                     curl --verbose \
                     --header 'Content-Type: application/json' \
                     --request DELETE \
-                    http://127.0.0.1:5000/api/v1/users/id/2
+                    http://127.0.0.1:8000/api/v1/users/id/2
 
     URL: /api/v1/users/<string:username>
     Usage:
         GET:  Get all informations except password for user from user username.
-            Example: http://127.0.0.1:5000/api/v1/users/WassupMan404
+            Example: http://127.0.0.1:8000/api/v1/users/WassupMan404
 
     URL: /api/v1/users/login
     Usage:
@@ -73,7 +80,7 @@ Users Microservice
     URL: /api/v1/users/<string:username>/password
     Usage:
         PATCH: Update user password.
-            Example: http://127.0.0.1:5000/api/v1/users/WassupMan404/password
+            Example: http://127.0.0.1:8000/api/v1/users/WassupMan404/password
             Expect:
                     Header to have: 'Content-Type: application/json'
                     Data is a json that contains
