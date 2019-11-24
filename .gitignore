@@ -7,6 +7,7 @@ track1.db
 track2.db
 track3.db
 test.html
-xspf/*
 trackTest/*
 playlistTest/*
+data/*
+music/*
