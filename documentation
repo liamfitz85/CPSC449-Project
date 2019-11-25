@@ -91,6 +91,9 @@ Users Microservice
                         }
 
 Tracks Microservice
+    DISCLAIMER: The tracks microservice testing script and jsons in the trackTest need to have a valid uuid to be inserted to properly work.
+                The uuid has to be copied into the script and jsons after calling the get all tracks in the browser.
+
     URL: /api/v1/collections/tracks/all
     Usage:
         GET: Get all tracks in the database
