@@ -4,6 +4,7 @@ from flask import request, jsonify, Response
 import flask_api
 from flask_api import status, exceptions
 import xml.dom.minidom
+from requests.exceptions import HTTPError
 
 app = flask_api.FlaskAPI(__name__,static_url_path='')
 
@@ -61,9 +62,10 @@ def generate_xspf(playID):
     try:
         playlists = requests.get("http://localhost:8000/api/v1/collections/playlists/all").json()
         tracks = requests.get("http://localhost:8000/api/v1/collections/tracks/all").json()
-    except Exception as e:
-        return { 'Error': str(e) }, status.HTTP_404_NOT_FOUND 
-    playlist = getPlayListByID(playID, playlists)
-    tracklist = getPlayListURLs(playlist)
-    xspf_playlist = getTrackInfoFromURL(tracklist, tracks, playlist)
-    return xspf_playlist.toXml(), status.HTTP_200_OK
+    except HTTPError as e:
+        return { 'Error': str(e) }, status.HTTP_404_NOT_FOUND
+    else:
+        playlist = getPlayListByID(playID, playlists)
+        tracklist = getPlayListURLs(playlist)
+        xspf_playlist = getTrackInfoFromURL(tracklist, tracks, playlist)
+        return xspf_playlist.toXml(), status.HTTP_200_OK
