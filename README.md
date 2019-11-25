@@ -3,7 +3,7 @@
 <b>Team Members</b><br />
 Wellson Pan - WellsonPan@csu.fullerton.edu - Dev 1<br />
 Liam Fitzpatrick - lfitzpatrick0@csu.fullerton.edu - Dev 2<br />
-Duy Do - duy.ado@csu.fullerton.edu- Ops<br />
+Duy Do - duy.ado@csu.fullerton.edu - Ops<br />
 
 <b>Usage:<br /></b> 
 &nbsp;&nbsp;if first run then:<br />
