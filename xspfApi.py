@@ -59,13 +59,13 @@ def getTrackInfoFromURL(urls, tracks, playlist):
 
 @app.route("/api/v1/collections/playlists/<int:playID>.xspf", methods = ['GET'])
 def generate_xspf(playID):
-    try:
-        playlists = requests.get("http://localhost:8000/api/v1/collections/playlists/all").json()
+        playlistURL = "http://localhost:8000/api/v1/collections/playlists/" + str(playID)
+        playlist = requests.get(playlistURL).json()
         tracks = requests.get("http://localhost:8000/api/v1/collections/tracks/all").json()
-    except HTTPError as e:
-        return { 'Error': str(e) }, status.HTTP_404_NOT_FOUND
-    else:
-        playlist = getPlayListByID(playID, playlists)
+        if playlist == {'message': 'This resource does not exist.'}:
+            raise exceptions.NotFound
+        if tracks == {'message': 'This resource does not exist.'}:
+            raise exceptions.NotFound
         tracklist = getPlayListURLs(playlist)
         xspf_playlist = getTrackInfoFromURL(tracklist, tracks, playlist)
         return xspf_playlist.toXml(), status.HTTP_200_OK
