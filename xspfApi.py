@@ -12,7 +12,7 @@ def getPlayListByID(id, playlists):
     for playlist in playlists:
         if playlist['playID'] == id:
             return playlist
-    return
+    return status.HTTP_404_NOT_FOUND
 
 def getUserByID(id):
     userstr = "http://localhost:8000/api/v1/users/id/%d" % (id)
