@@ -13,10 +13,10 @@ Duy Do - duy.ado@csu.fullerton.edu - Ops<br />
 &nbsp;&nbsp;&nbsp;&nbsp;foreman start <br />
 
 <b>To configure kong:<br /></b>
-&nbsp;&nbsp;./curl_requests.sh
+&nbsp;&nbsp;./add_services.sh
 
 <b>To populate all microservices:<br /></b>
-&nbsp;&nbsp;./add_services.sh
+&nbsp;&nbsp;./curl_requests.sh
 
 <b>Schema File:</b><br />
 &nbsp;&nbsp;queries/initQueries/init_db.sql<br />
